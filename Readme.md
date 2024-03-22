@@ -30,13 +30,13 @@ four regular/irregular categories:
 Nonwords were transcribed into the DISC phonetic alphabet. Examples are
 in Table 1.
 
-| burnt           | drove             | kept             | sang               |
-|:----------------|:------------------|:-----------------|:-------------------|
-| skurn, \[sk3n\] | geeve, \[giv\]    | preem, \[prim\]  | smim, \[smIm\]     |
-| trurn, \[tr3n\] | schmite, \[Sm2t\] | sweel, \[swil\]  | thring, \[TrIN\]   |
-| smill, \[smIl\] | spride, \[spr2d\] | theel, \[Til\]   | strink, \[strINk\] |
-| klill, \[klIl\] | dwide, \[dw2d\]   | pleel, \[plil\]  | fim, \[fIm\]       |
-| murn, \[m3n\]   | pline, \[pl2n\]   | shreen, \[Srin\] | schmim, \[SmIm\]   |
+| burnt             | drove             | kept              | sang             |
+|:------------------|:------------------|:------------------|:-----------------|
+| prill, \[prIl\]   | fide, \[f2d\]     | dreep, \[drip\]   | chim, \[JIm\]    |
+| skrurn, \[skr3n\] | thride, \[Tr2d\]  | streel, \[stril\] | thrim, \[TrIm\]  |
+| vrill, \[vrIl\]   | squine, \[skw2n\] | squeep, \[skwip\] | smink, \[smINk\] |
+| drurn, \[dr3n\]   | brive, \[br2v\]   | schmeem, \[Smim\] | frim, \[frIm\]   |
+| trurn, \[tr3n\]   | sline, \[sl2n\]   | shreep, \[Srip\]  | quink, \[kwINk\] |
 
 1. Nonword examples.
 
@@ -51,14 +51,14 @@ class, as seen in Table 2.
 
 | category | word   | regular_form | irregular_form |
 |:---------|:-------|:-------------|:---------------|
-| burnt    | brurn  | brurned      | brurnt         |
-| burnt    | jurn   | jurned       | jurnt          |
-| drove    | quide  | quided       | quode          |
-| drove    | brive  | brived       | brove          |
-| kept     | squeep | squeeped     | squept         |
-| kept     | greel  | greeled      | grelt          |
-| sang     | shring | shringed     | shrang         |
-| sang     | twim   | twimmed      | twam           |
+| burnt    | drell  | drelled      | drelt          |
+| burnt    | sprell | sprelled     | sprelt         |
+| drove    | shride | shrided      | shrode         |
+| drove    | dwide  | dwided       | dwode          |
+| kept     | sneep  | sneeped      | snept          |
+| kept     | theep  | theeped      | thept          |
+| sang     | schmim | schmimmed    | schmam         |
+| sang     | pring  | pringed      | prang          |
 
 2. Regular and irregular choices in the Wug task.
 
@@ -83,66 +83,66 @@ past tense form.
 
 | rule                                                                                                                                        | type      | scope | hits | reliability | confidence |
 |:--------------------------------------------------------------------------------------------------------------------------------------------|:----------|------:|-----:|------------:|-----------:|
-| \[\] -\> d \[3, @, a\]n \_                                                                                                                  | regular   |   135 |  133 |   0.9851852 |  0.9801645 |
-| \[\] -\> d \[3, D, S, T, Z, l, r, s, z\] \_                                                                                                 | regular   |  1443 | 1414 |   0.9799030 |  0.9791014 |
-| \[\] -\> d \[D, S, T, Z, n, s, z\] \_                                                                                                       | regular   |   902 |  883 |   0.9789357 |  0.9757673 |
-| \[\] -\> d \[2, 4, 6, e, i, o, u\]m \_                                                                                                      | regular   |    63 |   62 |   0.9841270 |  0.9741592 |
-| \[\] -\> d \[D, S, T, Z, f, s, v, z\] \_                                                                                                    | regular   |   712 |  698 |   0.9803371 |  0.9685169 |
-| \[\] -\> d \[b, m\] \_                                                                                                                      | regular   |   169 |  164 |   0.9704142 |  0.9659363 |
-| \[\] -\> d \[b, p\] \_                                                                                                                      | regular   |   214 |  207 |   0.9672897 |  0.9635397 |
-| \[\] -\> d \[J, S, T, s, t\] \_                                                                                                             | regular   |  1364 | 1314 |   0.9633431 |  0.9617850 |
-| \[\] -\> @d \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]»2d \_                                                                    | regular   |    13 |   13 |   1.0000000 |  0.9576797 |
-| \[\] -\> @d \[D, T, d, n, s, t, z\]»2t \_                                                                                                   | regular   |    11 |   11 |   1.0000000 |  0.9505677 |
-| \[\] -\> d \[3, D, J, S, T, Z, \_, d, l, n, r, s, t, z\] \_                                                                                 | regular   |  3183 | 3046 |   0.9569588 |  0.9440474 |
-| \[\] -\> @d t \_                                                                                                                            | regular   |   959 |  913 |   0.9520334 |  0.9414211 |
-| \[\] -\> t \[J, S, T, f, k, p, s, t, ~\] \_                                                                                                 | regular   |  1779 | 1695 |   0.9527825 |  0.9394042 |
-| \[\] -\> t \[D, J, S, T, Z, \_, d, s, t, z\] \_                                                                                             | regular   |  2020 | 1919 |   0.9500000 |  0.9383462 |
-| \[\] -\> d \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\] \_                                                                        | regular   |  2602 | 2458 |   0.9446580 |  0.9361007 |
-| \[\] -\> d \[D, J, N, S, T, Z, \_, b, d, f, g, h, k, l, m, n, p, s, t, v, z, ~\] \_                                                         | regular   |  3510 | 3317 |   0.9450142 |  0.9310006 |
-| \[\] -\> @d \[2, 3, 4, 6, @, A, E, Q, V, a, e, o, {, »\]d \_                                                                                | regular   |    99 |   89 |   0.8989899 |  0.8866943 |
-| 2 -\> o \[3, D, J, S, T, Z, \_, d, l, n, r, s, t, z\]r» \_ \[d, t\]                                                                         | irregular |     4 |    4 |   1.0000000 |  0.8795103 |
-| ip -\> Ept \[N, g, j, k, w\]» \_                                                                                                            | irregular |     3 |    3 |   1.0000000 |  0.8478609 |
-| ip -\> Ept \[j, l, r, w\]» \_                                                                                                               | irregular |     7 |    6 |   0.8571429 |  0.7931631 |
-| 2 -\> o r» \_ \[d, t\]                                                                                                                      | irregular |     9 |    7 |   0.7777778 |  0.7312783 |
-| 2 -\> o \[S, Z, r\]» \_ \[d, n, t\]                                                                                                         | irregular |    13 |    9 |   0.6923077 |  0.6619467 |
-| 2 -\> o \[2, 3, 4, 6, @, A, D, E, I, N, Q, U, V, Z, \_, a, b, d, e, g, i, j, l, m, n, o, r, u, v, w, z, {, »\]r» \_ \[D, Z, v, z\]          | irregular |     3 |    2 |   0.6666667 |  0.5852725 |
-| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ N                                                                                                    | irregular |     3 |    2 |   0.6666667 |  0.5852725 |
-| I -\> { \[D, J, S, T, Z, \_, d, s, t, z\]r» \_ Nk                                                                                           | irregular |     3 |    2 |   0.6666667 |  0.5852725 |
-| ip -\> Ept \[D, J, N, S, T, Z, \_, b, d, f, g, h, j, k, l, m, n, p, r, s, t, v, w, z, ~\]» \_                                               | irregular |    12 |    7 |   0.5833333 |  0.5585831 |
-| \[\] -\> t \[D, N, Z, \_, b, d, g, l, m, n, v, z\]»3n \_                                                                                    | irregular |     4 |    2 |   0.5000000 |  0.4658505 |
-| il -\> Elt \[D, N, S, T, Z, f, m, n, s, v, z\]» \_                                                                                          | irregular |     4 |    2 |   0.5000000 |  0.4658505 |
-| il -\> Elt \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\]» \_                                                              | irregular |     7 |    3 |   0.4285714 |  0.4129233 |
-| I -\> { \[N, g, j, w\]» \_ \[N, m, n\]                                                                                                      | irregular |     5 |    2 |   0.4000000 |  0.3871598 |
-| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ v                                                                                                   | irregular |     8 |    3 |   0.3750000 |  0.3664320 |
-| I -\> { r» \_ N                                                                                                                             | irregular |     6 |    2 |   0.3333333 |  0.3312874 |
-| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]r» \_ N                                                                       | irregular |     9 |    3 |   0.3333333 |  0.3293778 |
-| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]                                              | irregular |    12 |    4 |   0.3333333 |  0.3284934 |
-| I -\> { \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ Nk                                                                                   | irregular |    12 |    4 |   0.3333333 |  0.3284934 |
-| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ N                                                                                                    | irregular |    10 |    3 |   0.3000000 |  0.2991442 |
-| \[\] -\> t \[m, w\]»El \_                                                                                                                   | irregular |     7 |    2 |   0.2857143 |  0.2895367 |
-| 2 -\> o \[N, j, l, m, n, r, w\]» \_ t                                                                                                       | irregular |    14 |    4 |   0.2857143 |  0.2843063 |
-| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ \[D, Z, \_, b, d, g, v, z\]                                                                         | irregular |    34 |    9 |   0.2647059 |  0.2617840 |
-| 2 -\> o \[N, j, l, m, n, r, w\]» \_ \[d, t\]                                                                                                | irregular |    22 |    8 |   0.3636364 |  0.2598365 |
-| I -\> { \[b, m, v, w\]» \_ \[N, \_, b, d, g, m, n\]                                                                                         | irregular |     8 |    2 |   0.2500000 |  0.2571449 |
-| 2 -\> o \[D, J, S, T, Z, \_, d, s, t, z\]» \_ \[D, N, Z, m, n, v, z\]                                                                       | irregular |     9 |    2 |   0.2222222 |  0.2312783 |
-| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, N, Z, \_, b, d, g, m, n, v, z\]                                                 | irregular |    18 |    4 |   0.2222222 |  0.2240710 |
-| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ \[J, N, \_, b, d, g, k, m, n, p, t, ~\]                                                              | irregular |    15 |    3 |   0.2000000 |  0.2050916 |
-| I -\> { \[j, r, w\]» \_ \[N, m, n\]                                                                                                         | irregular |    15 |    3 |   0.2000000 |  0.2050916 |
-| I -\> { \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ N                                                                                    | irregular |    35 |    7 |   0.2000000 |  0.1996522 |
-| I -\> { \[D, S, T, Z, f, h, j, l, r, s, v, w, z\]» \_ \[N, m, n\]                                                                           | irregular |    22 |    4 |   0.1818182 |  0.1848948 |
-| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]» \_ \[N, m, n\]                                                              | irregular |    13 |    2 |   0.1538462 |  0.1649380 |
-| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\]                      | irregular |    29 |    5 |   0.1724138 |  0.1562866 |
-| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, N, Z, m, n, v, z\]                                                              | irregular |    44 |    7 |   0.1590909 |  0.1378996 |
-| i -\> o \[b, f, m, p, v, w\]» \_ \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]                                                     | irregular |    30 |    4 |   0.1333333 |  0.1370108 |
-| I -\> { \[j, r, w\]» \_ \[N, m, n\]                                                                                                         | irregular |    45 |    5 |   0.1111111 |  0.1045317 |
-| \[\] -\> t \[E, I\]l \_                                                                                                                     | irregular |    46 |    4 |   0.0869565 |  0.0902653 |
-| 2 -\> o \[D, N, S, T, Z, f, m, n, s, v, z\]» \_ \[d, n, t\]                                                                                 | irregular |    36 |    3 |   0.0833333 |  0.0884263 |
-| i -\> o \[D, J, N, S, T, Z, \_, b, d, f, g, h, j, k, l, m, n, p, r, s, t, v, w, z, ~\]» \_ \[D, Z, l, v, z\]                                | irregular |    50 |    4 |   0.0800000 |  0.0831690 |
-| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]» \_ \[N, m, n\]                                                              | irregular |    58 |    4 |   0.0689655 |  0.0718767 |
-| I -\> { \[D, N, Z, \_, b, d, g, j, l, m, n, r, v, w, z\]» \_ \[N, m, n\]                                                                    | irregular |    83 |    6 |   0.0722892 |  0.0710064 |
-| 2 -\> o \[D, N, S, T, Z, f, h, j, l, m, n, r, s, v, w, z\]» \_ \[d, n, t\]                                                                  | irregular |    66 |   10 |   0.1515152 |  0.0654751 |
-| 2 -\> o \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\]» \_ \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\] | irregular |    75 |    4 |   0.0533333 |  0.0557742 |
-| \[\] -\> t \[d, n, t\] \_                                                                                                                   | irregular |  1545 | 1144 |   0.7404531 |  0.0163544 |
+| \[\] -\> d \[3, @, a\]n \_                                                                                                                  | regular   |   135 |  133 |        0.99 |       0.98 |
+| \[\] -\> d \[3, D, S, T, Z, l, r, s, z\] \_                                                                                                 | regular   |  1443 | 1414 |        0.98 |       0.98 |
+| \[\] -\> d \[D, S, T, Z, n, s, z\] \_                                                                                                       | regular   |   902 |  883 |        0.98 |       0.98 |
+| \[\] -\> d \[2, 4, 6, e, i, o, u\]m \_                                                                                                      | regular   |    63 |   62 |        0.98 |       0.97 |
+| \[\] -\> d \[D, S, T, Z, f, s, v, z\] \_                                                                                                    | regular   |   712 |  698 |        0.98 |       0.97 |
+| \[\] -\> d \[b, m\] \_                                                                                                                      | regular   |   169 |  164 |        0.97 |       0.97 |
+| \[\] -\> d \[b, p\] \_                                                                                                                      | regular   |   214 |  207 |        0.97 |       0.96 |
+| \[\] -\> d \[J, S, T, s, t\] \_                                                                                                             | regular   |  1364 | 1314 |        0.96 |       0.96 |
+| \[\] -\> @d \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]»2d \_                                                                    | regular   |    13 |   13 |        1.00 |       0.96 |
+| \[\] -\> @d \[D, T, d, n, s, t, z\]»2t \_                                                                                                   | regular   |    11 |   11 |        1.00 |       0.95 |
+| \[\] -\> d \[3, D, J, S, T, Z, \_, d, l, n, r, s, t, z\] \_                                                                                 | regular   |  3183 | 3046 |        0.96 |       0.94 |
+| \[\] -\> @d t \_                                                                                                                            | regular   |   959 |  913 |        0.95 |       0.94 |
+| \[\] -\> t \[J, S, T, f, k, p, s, t, ~\] \_                                                                                                 | regular   |  1779 | 1695 |        0.95 |       0.94 |
+| \[\] -\> t \[D, J, S, T, Z, \_, d, s, t, z\] \_                                                                                             | regular   |  2020 | 1919 |        0.95 |       0.94 |
+| \[\] -\> d \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\] \_                                                                        | regular   |  2602 | 2458 |        0.94 |       0.94 |
+| \[\] -\> d \[D, J, N, S, T, Z, \_, b, d, f, g, h, k, l, m, n, p, s, t, v, z, ~\] \_                                                         | regular   |  3510 | 3317 |        0.95 |       0.93 |
+| \[\] -\> @d \[2, 3, 4, 6, @, A, E, Q, V, a, e, o, {, »\]d \_                                                                                | regular   |    99 |   89 |        0.90 |       0.89 |
+| 2 -\> o \[3, D, J, S, T, Z, \_, d, l, n, r, s, t, z\]r» \_ \[d, t\]                                                                         | irregular |     4 |    4 |        1.00 |       0.88 |
+| ip -\> Ept \[N, g, j, k, w\]» \_                                                                                                            | irregular |     3 |    3 |        1.00 |       0.85 |
+| ip -\> Ept \[j, l, r, w\]» \_                                                                                                               | irregular |     7 |    6 |        0.86 |       0.79 |
+| 2 -\> o r» \_ \[d, t\]                                                                                                                      | irregular |     9 |    7 |        0.78 |       0.73 |
+| 2 -\> o \[S, Z, r\]» \_ \[d, n, t\]                                                                                                         | irregular |    13 |    9 |        0.69 |       0.66 |
+| 2 -\> o \[2, 3, 4, 6, @, A, D, E, I, N, Q, U, V, Z, \_, a, b, d, e, g, i, j, l, m, n, o, r, u, v, w, z, {, »\]r» \_ \[D, Z, v, z\]          | irregular |     3 |    2 |        0.67 |       0.59 |
+| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ N                                                                                                    | irregular |     3 |    2 |        0.67 |       0.59 |
+| I -\> { \[D, J, S, T, Z, \_, d, s, t, z\]r» \_ Nk                                                                                           | irregular |     3 |    2 |        0.67 |       0.59 |
+| ip -\> Ept \[D, J, N, S, T, Z, \_, b, d, f, g, h, j, k, l, m, n, p, r, s, t, v, w, z, ~\]» \_                                               | irregular |    12 |    7 |        0.58 |       0.56 |
+| \[\] -\> t \[D, N, Z, \_, b, d, g, l, m, n, v, z\]»3n \_                                                                                    | irregular |     4 |    2 |        0.50 |       0.47 |
+| il -\> Elt \[D, N, S, T, Z, f, m, n, s, v, z\]» \_                                                                                          | irregular |     4 |    2 |        0.50 |       0.47 |
+| il -\> Elt \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\]» \_                                                              | irregular |     7 |    3 |        0.43 |       0.41 |
+| I -\> { \[N, g, j, w\]» \_ \[N, m, n\]                                                                                                      | irregular |     5 |    2 |        0.40 |       0.39 |
+| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ v                                                                                                   | irregular |     8 |    3 |        0.38 |       0.37 |
+| I -\> { r» \_ N                                                                                                                             | irregular |     6 |    2 |        0.33 |       0.33 |
+| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]r» \_ N                                                                       | irregular |     9 |    3 |        0.33 |       0.33 |
+| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]                                              | irregular |    12 |    4 |        0.33 |       0.33 |
+| I -\> { \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ Nk                                                                                   | irregular |    12 |    4 |        0.33 |       0.33 |
+| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ N                                                                                                    | irregular |    10 |    3 |        0.30 |       0.30 |
+| \[\] -\> t \[m, w\]»El \_                                                                                                                   | irregular |     7 |    2 |        0.29 |       0.29 |
+| 2 -\> o \[N, j, l, m, n, r, w\]» \_ t                                                                                                       | irregular |    14 |    4 |        0.29 |       0.28 |
+| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ \[D, Z, \_, b, d, g, v, z\]                                                                         | irregular |    34 |    9 |        0.26 |       0.26 |
+| 2 -\> o \[N, j, l, m, n, r, w\]» \_ \[d, t\]                                                                                                | irregular |    22 |    8 |        0.36 |       0.26 |
+| I -\> { \[b, m, v, w\]» \_ \[N, \_, b, d, g, m, n\]                                                                                         | irregular |     8 |    2 |        0.25 |       0.26 |
+| 2 -\> o \[D, J, S, T, Z, \_, d, s, t, z\]» \_ \[D, N, Z, m, n, v, z\]                                                                       | irregular |     9 |    2 |        0.22 |       0.23 |
+| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, N, Z, \_, b, d, g, m, n, v, z\]                                                 | irregular |    18 |    4 |        0.22 |       0.22 |
+| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ \[J, N, \_, b, d, g, k, m, n, p, t, ~\]                                                              | irregular |    15 |    3 |        0.20 |       0.21 |
+| I -\> { \[j, r, w\]» \_ \[N, m, n\]                                                                                                         | irregular |    15 |    3 |        0.20 |       0.21 |
+| I -\> { \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ N                                                                                    | irregular |    35 |    7 |        0.20 |       0.20 |
+| I -\> { \[D, S, T, Z, f, h, j, l, r, s, v, w, z\]» \_ \[N, m, n\]                                                                           | irregular |    22 |    4 |        0.18 |       0.18 |
+| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]» \_ \[N, m, n\]                                                              | irregular |    13 |    2 |        0.15 |       0.16 |
+| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\]                      | irregular |    29 |    5 |        0.17 |       0.16 |
+| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, N, Z, m, n, v, z\]                                                              | irregular |    44 |    7 |        0.16 |       0.14 |
+| i -\> o \[b, f, m, p, v, w\]» \_ \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]                                                     | irregular |    30 |    4 |        0.13 |       0.14 |
+| I -\> { \[j, r, w\]» \_ \[N, m, n\]                                                                                                         | irregular |    45 |    5 |        0.11 |       0.10 |
+| \[\] -\> t \[E, I\]l \_                                                                                                                     | irregular |    46 |    4 |        0.09 |       0.09 |
+| 2 -\> o \[D, N, S, T, Z, f, m, n, s, v, z\]» \_ \[d, n, t\]                                                                                 | irregular |    36 |    3 |        0.08 |       0.09 |
+| i -\> o \[D, J, N, S, T, Z, \_, b, d, f, g, h, j, k, l, m, n, p, r, s, t, v, w, z, ~\]» \_ \[D, Z, l, v, z\]                                | irregular |    50 |    4 |        0.08 |       0.08 |
+| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]» \_ \[N, m, n\]                                                              | irregular |    58 |    4 |        0.07 |       0.07 |
+| I -\> { \[D, N, Z, \_, b, d, g, j, l, m, n, r, v, w, z\]» \_ \[N, m, n\]                                                                    | irregular |    83 |    6 |        0.07 |       0.07 |
+| 2 -\> o \[D, N, S, T, Z, f, h, j, l, m, n, r, s, v, w, z\]» \_ \[d, n, t\]                                                                  | irregular |    66 |   10 |        0.15 |       0.07 |
+| 2 -\> o \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\]» \_ \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\] | irregular |    75 |    4 |        0.05 |       0.06 |
+| \[\] -\> t \[d, n, t\] \_                                                                                                                   | irregular |  1545 | 1144 |        0.74 |       0.02 |
 
 3. Rules from Celex.
 
@@ -152,15 +152,15 @@ forms, there is one regular and one irregular rule available. For some,
 there is no irregular rule. For some, there are more regular rules.
 Examples can be seen in Table 4.
 
-| category | word    | regular | irregular |
-|:---------|:--------|--------:|----------:|
-| burnt    | drell   |       1 |         1 |
-| drove    | schmine |       1 |         1 |
-| drove    | vrite   |       2 |         1 |
-| drove    | blide   |       3 |         1 |
-| kept     | greel   |       1 |         1 |
-| sang     | sping   |       1 |         1 |
-| sang     | twink   |       2 |         1 |
+| category | word   | regular | irregular |
+|:---------|:-------|--------:|----------:|
+| burnt    | skell  |       1 |         1 |
+| drove    | squine |       1 |         1 |
+| drove    | chite  |       2 |         1 |
+| drove    | yide   |       3 |         1 |
+| kept     | skeep  |       1 |         1 |
+| sang     | thring |       1 |         1 |
+| sang     | grink  |       2 |         1 |
 
 Table 4. Possible number of regular / irregular rules for some forms.
 

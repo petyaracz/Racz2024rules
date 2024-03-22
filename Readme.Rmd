@@ -102,7 +102,7 @@ d %>%
   filter(!is.na(rule)) %>% 
   distinct(rule,type,scope,hits,reliability,confidence) %>% 
   arrange(-confidence) %>% 
-  kable('simple', caption = '3. Rules from Celex.')
+  kable('simple', caption = '3. Rules from Celex.', digits = 2)
 ```
 
 Rules take the structural description of input -> output / context. Multiple rules can apply to the same input form. For the majority of forms, there is one regular and one irregular rule available. For some, there is no irregular rule. For some, there are more regular rules. Examples can be seen in Table 4.
