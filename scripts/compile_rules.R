@@ -1,6 +1,6 @@
 # create tidy rules, match to forms
 
-setwd('~/Github/Racz2024c')
+setwd('~/Github/Racz2024rules')
 
 library(tidyverse)
 library(magrittr)
@@ -165,6 +165,12 @@ weights = rforms %>%
   ) %>% 
   select(word,disc,baseline_log_odds_regular,weight,regular,irregular)
 
+# add word past forms
+d2 = matcher %>% 
+  select(base.print,regular.print,irregular.print) %>% 
+  rename(word = base.print, regular_form = regular.print, irregular_form = irregular.print) %>% 
+  right_join(d2)
+  
 # tidy d
 d3 = d2 %>% 
   mutate(
@@ -176,7 +182,7 @@ d3 = d2 %>%
     esp_match = resp_reg == resp_bot_reg
   ) %>% 
   left_join(weights) %>% 
-  select(participant_id,word,disc,category,baseline_log_odds_regular,weight,regular,irregular,resp_reg,reg_rate,lex_typicality,phase,overall_index,trial_index,resp_bot_reg,esp_match,rule,rule_id,best_rule_word_type,type,scope,hits,reliability,confidence)
+  select(participant_id,word,regular_form,irregular_form,disc,category,baseline_log_odds_regular,weight,regular,irregular,resp_reg,reg_rate,lex_typicality,phase,overall_index,trial_index,resp_bot_reg,esp_match,rule,rule_id,best_rule_word_type,type,scope,hits,reliability,confidence)
   
 # -- write -- #
 
