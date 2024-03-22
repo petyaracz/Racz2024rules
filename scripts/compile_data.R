@@ -1,4 +1,4 @@
-# create tidy rules, match to forms
+# combine rules, forms, experiment data
 
 setwd('~/Github/Racz2024rules')
 
@@ -14,7 +14,7 @@ path = '~/Github/published/RaczBecknerHayPierrehumbert2019/'
 # baseline data
 baseline = read_csv(glue('{path}/data/convergence_paper_baseline_data.txt'))
 # rules
-r = read_tsv(glue('{path}/models/mgl/baseline_mgl/CELEXFull3.sum'))
+r = read_tsv('dat/rules_fancy.tsv')
 # matcher
 matcher = read_csv(glue('{path}/data/256verbs_print_forms.txt'))
 # real verbs
@@ -66,76 +66,8 @@ transcriptions = matcher %>%
 # baseline with proper transcriptions
 forms = left_join(b_counts,transcriptions)  
 
-# rules
-rules = r %>% 
-  mutate(
-    present = str_replace(form1, '»', ''),
-    past = str_replace(form2, '»', ''),
-    rule = case_when(
-     is.na(Qfeat) & !is.na(Q) ~ glue('{A} -> {B} \ {Pfeat}{P} _ {Q}'),
-     !is.na(Qfeat) & is.na(Q) ~ glue('{A} -> {B} \ {Pfeat}{P} _ {Qfeat}'),
-     is.na(Qfeat) & is.na(Q) ~ glue('{A} -> {B} \ {Pfeat}{P} _ ')
-    ) %>% 
-      str_replace_all('NA', '')
-  ) %>% 
-  select(rule,past,present,A,B,Change,P,Pfeat,Q,Qfeat,scope,hits,reliability,confidence,`related forms`,exceptions)
-
-# add rule id
-rules = rules %>% 
-  distinct(rule,scope,hits) %>% 
-  mutate(rule_id = glue('rule {1:n()}')) %>% 
-  left_join(rules)
-
-# add features
-
-# nice rules
-celex2 = celex %>% 
-  rename(ahpa = X1, orth = X4) %>% 
-  distinct(ahpa, orth)
-
-# duplicates because of orthography: raise raze and so on.
-rules_forms = rules %>% 
-  distinct(rule,rule_id,Change,P,Pfeat,Q,Qfeat,scope,hits,confidence,`related forms`,exceptions) %>% 
-  mutate(
-    related_forms_list = str_split(`related forms`, ','),
-    exceptions_list = str_split(exceptions, ', '),
-  ) %>% 
-  unnest(related_forms_list) %>%
-  mutate(ahpa = str_replace_all(related_forms_list, c(' ' = '', '»' = ''))) %>% 
-  left_join(celex2) %>% 
-  group_by(rule,Change,P,Pfeat,Q,Qfeat,scope,hits,confidence) %>% 
-  mutate(related_forms = paste(orth, collapse = ', ')) %>% 
-  distinct(rule,rule_id,Change,P,Pfeat,Q,Qfeat,scope,hits,confidence,exceptions_list,related_forms) %>% 
-  ungroup() %>% 
-  unnest(exceptions_list) %>%
-  mutate(ahpa = str_replace_all(exceptions_list, c(' ' = '', '»' = ''))) %>% 
-  left_join(celex2) %>% 
-  group_by(rule,rule_id,Change,P,Pfeat,Q,Qfeat,scope,hits,confidence,related_forms) %>% 
-  mutate(exceptions = paste(orth, collapse = ', ')) %>% 
-  distinct(rule,rule_id,Change,P,Pfeat,Q,Qfeat,scope,hits,confidence,related_forms,exceptions) %>% 
-  ungroup()
-
-# combine rules with nice related form and exception list
-rules2 = rules %>% 
-  select(-`related forms`,-exceptions) %>% 
-  left_join(rules_forms)
-
-# so some rules are there twice, once B==t, once B==d. otherwise completely identical. so we can keep the d ones and drop the t ones. this makes no practical difference.
-rules_filt = rules2 %>% 
-  distinct(rule, rule_id, A, B, scope, hits, confidence, related_forms, exceptions) %>% 
-  group_by(scope, hits, confidence, related_forms, exceptions) %>% 
-  arrange(B) %>% 
-  slice(1) %>% 
-  ungroup()
-
-rules3 = rules2 %>% 
-  inner_join(rules_filt)
-
-# looks about right
-# anti_join(rules2,rules3) %>% View
-
 # combine rules and forms
-rforms = left_join(forms,rules3)
+rforms = left_join(forms,r)
 
 # mark best regular and irregular rule for each form
 rforms %<>% 

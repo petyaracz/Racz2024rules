@@ -32,11 +32,11 @@ in Table 1.
 
 | burnt             | drove             | kept              | sang             |
 |:------------------|:------------------|:------------------|:-----------------|
-| prill, \[prIl\]   | fide, \[f2d\]     | dreep, \[drip\]   | chim, \[JIm\]    |
-| skrurn, \[skr3n\] | thride, \[Tr2d\]  | streel, \[stril\] | thrim, \[TrIm\]  |
-| vrill, \[vrIl\]   | squine, \[skw2n\] | squeep, \[skwip\] | smink, \[smINk\] |
-| drurn, \[dr3n\]   | brive, \[br2v\]   | schmeem, \[Smim\] | frim, \[frIm\]   |
-| trurn, \[tr3n\]   | sline, \[sl2n\]   | shreep, \[Srip\]  | quink, \[kwINk\] |
+| skell, \[skEl\]   | squide, \[skw2d\] | sneen, \[snin\]   | quink, \[kwINk\] |
+| drurn, \[dr3n\]   | splive, \[spl2v\] | neen, \[nin\]     | dwink, \[dwINk\] |
+| lell, \[lEl\]     | squine, \[skw2n\] | kleem, \[klim\]   | gring, \[grIN\]  |
+| skrurn, \[skr3n\] | thide, \[T2d\]    | squeep, \[skwip\] | zim, \[zIm\]     |
+| zell, \[zEl\]     | squite, \[skw2t\] | sweel, \[swil\]   | dwim, \[dwIm\]   |
 
 1. Nonword examples.
 
@@ -51,14 +51,14 @@ class, as seen in Table 2.
 
 | category | word   | regular_form | irregular_form |
 |:---------|:-------|:-------------|:---------------|
-| burnt    | drell  | drelled      | drelt          |
-| burnt    | sprell | sprelled     | sprelt         |
-| drove    | shride | shrided      | shrode         |
-| drove    | dwide  | dwided       | dwode          |
-| kept     | sneep  | sneeped      | snept          |
-| kept     | theep  | theeped      | thept          |
-| sang     | schmim | schmimmed    | schmam         |
-| sang     | pring  | pringed      | prang          |
+| burnt    | hurn   | hurned       | hurnt          |
+| burnt    | rurn   | rurned       | rurnt          |
+| drove    | twite  | twited       | twote          |
+| drove    | brive  | brived       | brove          |
+| kept     | neen   | neened       | nent           |
+| kept     | neem   | neemed       | nemt           |
+| sang     | vink   | vinked       | vank           |
+| sang     | spling | splinged     | splang         |
 
 2. Regular and irregular choices in the Wug task.
 
@@ -154,13 +154,13 @@ Examples can be seen in Table 4.
 
 | category | word   | regular | irregular |
 |:---------|:-------|--------:|----------:|
-| burnt    | skell  |       1 |         1 |
-| drove    | squine |       1 |         1 |
-| drove    | chite  |       2 |         1 |
-| drove    | yide   |       3 |         1 |
-| kept     | skeep  |       1 |         1 |
-| sang     | thring |       1 |         1 |
-| sang     | grink  |       2 |         1 |
+| burnt    | surn   |       1 |         1 |
+| drove    | splive |       1 |         1 |
+| drove    | squite |       2 |         1 |
+| drove    | thride |       3 |         1 |
+| kept     | kleel  |       1 |         1 |
+| sang     | schmim |       1 |         1 |
+| sang     | snink  |       2 |         1 |
 
 Table 4. Possible number of regular / irregular rules for some forms.
 
