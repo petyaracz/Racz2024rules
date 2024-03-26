@@ -15,13 +15,13 @@ getFeatures = function(df1){
   df1 %<>% 
     left_join(features, by = join_by(segment)) %>% 
     select_if(~all(. == .[1])) %>% 
-    distinct() %>% 
+    distinct() %>%
     select(
       where(
         ~!all(is.na(.x))
       )
     )
-  df1 = paste(paste(df1[1, ], names(df1), sep = " "), collapse = ", ")  
+  df1 = paste(paste(df1[1, ], names(df1), sep = " "), collapse = ", ")
   return(df1)
 }
 
@@ -40,7 +40,7 @@ f = read_tsv(glue('{path}/models/mgl/baseline_mgl/CELEXFull3.fea'))
 features = f %>% 
   select(-ASCII) %>% # remove ascii col
   rename(segment = `Seg.`) %>%  # change name of segment col
-  slice(-1) %>% # drop first row
+  slice(-1) %>%  # drop first row
   mutate_all(~ifelse(. == -1, NA, .)) # -1 means underspecified. we change it to NA
 
 # tidy up rules. remove stress, glue together rule
@@ -145,6 +145,28 @@ qrules = rules %>%
 rules4 = rules3 %>% 
   left_join(prules) %>% 
   left_join(qrules)
+
+# check missing rule descriptions
+rules4 %<>% 
+  mutate(
+    Pnatural_class = case_when(
+      Pfeat == "[2, 3, 4, 6, @, A, E, Q, V, a, e, o, {, »]" ~ 'mid-open vowel',
+      Pfeat == "[2, 3, 4, 6, @, A, D, E, I, N, Q, U, V, Z, _, a, b, d, e, g, i, j, l, m, n, o, r, u, v, w, z, {, »]" ~ 'non-voiceless obstruent',
+      Pfeat == "[2, 3, 4, 6, @, A, D, E, I, Q, S, T, U, V, Z, a, e, f, h, i, j, l, o, r, s, u, v, w, z, {, »]" ~ 'non-stop',
+      Pfeat == "[2, 3, 4, 6, @, A, E, I, Q, U, V, a, e, i, j, l, o, r, u, w, {, »]" ~ 'vowel or approximant',
+      Pfeat == "[2, 3, 4, 6, @, A, E, I, Q, U, V, a, e, i, j, o, r, u, w, {, »]" ~ 'vowel or non-lateral approximant',
+      T ~ Pnatural_class
+    ),
+    rule_left_side = case_when(
+      is.na(P) ~ glue('{Pnatural_class}'),
+      !is.na(P) ~ glue('{Pnatural_class} {P}')
+    ),
+    rule_right_side = case_when(
+      is.na(Q) ~ glue('{Qnatural_class}'),
+      !is.na(Q) ~ glue('{Q} {Qnatural_class}')
+    ),
+    rule_tidy = glue('{A} -> {B} / {rule_left_side} _ {rule_right_side}')
+  )
 
 # we now have rules with phonological features specifying the structural descriptions, like in the SPE or whatever! and scope and hits lists using english orthography.
 

@@ -114,7 +114,7 @@ d3 = d2 %>%
     esp_match = resp_reg == resp_bot_reg
   ) %>% 
   left_join(weights) %>% 
-  select(participant_id,word,regular_form,irregular_form,disc,category,baseline_log_odds_regular,weight,regular,irregular,resp_reg,reg_rate,lex_typicality,phase,overall_index,trial_index,resp_bot_reg,esp_match,rule,rule_id,best_rule_word_type,type,scope,hits,reliability,confidence)
+  select(participant_id,word,regular_form,irregular_form,disc,category,baseline_log_odds_regular,weight,regular,irregular,resp_reg,reg_rate,lex_typicality,phase,overall_index,trial_index,resp_bot_reg,esp_match,rule,rule_tidy,rule_id,best_rule_word_type,type,scope,hits,reliability,confidence)
   
 # -- write -- #
 
