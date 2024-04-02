@@ -22,6 +22,7 @@ getFeatures = function(df1){
       )
     )
   df1 = paste(paste(df1[1, ], names(df1), sep = " "), collapse = ", ")
+  df1 = glue('[{df1}]')
   return(df1)
 }
 
@@ -150,11 +151,11 @@ rules4 = rules3 %>%
 rules4 %<>% 
   mutate(
     Pnatural_class = case_when(
-      Pfeat == "[2, 3, 4, 6, @, A, E, Q, V, a, e, o, {, »]" ~ 'mid-open vowel',
-      Pfeat == "[2, 3, 4, 6, @, A, D, E, I, N, Q, U, V, Z, _, a, b, d, e, g, i, j, l, m, n, o, r, u, v, w, z, {, »]" ~ 'non-voiceless obstruent',
-      Pfeat == "[2, 3, 4, 6, @, A, D, E, I, Q, S, T, U, V, Z, a, e, f, h, i, j, l, o, r, s, u, v, w, z, {, »]" ~ 'non-stop',
-      Pfeat == "[2, 3, 4, 6, @, A, E, I, Q, U, V, a, e, i, j, l, o, r, u, w, {, »]" ~ 'vowel or approximant',
-      Pfeat == "[2, 3, 4, 6, @, A, E, I, Q, U, V, a, e, i, j, o, r, u, w, {, »]" ~ 'vowel or non-lateral approximant',
+      Pfeat == "[2, 3, 4, 6, @, A, E, Q, V, a, e, o, {, »]" ~ '[mid-open vowel]',
+      Pfeat == "[2, 3, 4, 6, @, A, D, E, I, N, Q, U, V, Z, _, a, b, d, e, g, i, j, l, m, n, o, r, u, v, w, z, {, »]" ~ '[non-voiceless obstruent]',
+      Pfeat == "[2, 3, 4, 6, @, A, D, E, I, Q, S, T, U, V, Z, a, e, f, h, i, j, l, o, r, s, u, v, w, z, {, »]" ~ '[non-stop]',
+      Pfeat == "[2, 3, 4, 6, @, A, E, I, Q, U, V, a, e, i, j, l, o, r, u, w, {, »]" ~ '[vowel or approximant]',
+      Pfeat == "[2, 3, 4, 6, @, A, E, I, Q, U, V, a, e, i, j, o, r, u, w, {, »]" ~ '[vowel or non-lateral approximant]',
       T ~ Pnatural_class
     ),
     rule_left_side = case_when(

@@ -8,18 +8,23 @@ library(glue)
 
 # -- fun -- #
 
-updateConfidence = function(learning_rate,which_rules){
+updateConfidence = function(learning_rate,which_rules,which_responses){
   
-  # take d, keep the reversed esp phase, only the best rules (those play into the final weight), tally up _participant_ responses
+  # take d, keep the reversed esp phase, only the best rules (those play into the final weight), tally up robot / participant responses
   updated_confidences = d %>%
     filter(
       phase == 'esp',
       reg_dist == 'reversed',
       best_rule_word_type
     ) %>% 
-    mutate(resp_bot_reg = as.double(resp_bot_reg)) %>% 
-    count(participant_id,rule,type,confidence,scope,resp_reg) %>%
-    pivot_wider(names_from = resp_reg, values_from = n, values_fill = 0) %>% 
+    mutate(
+      mod_resp_reg = case_when(
+        which_responses == 'coplayer' ~ as.double(resp_bot_reg),
+        which_responses == 'own' ~ resp_reg
+      )
+           ) %>% 
+    count(participant_id,rule,type,confidence,scope,mod_resp_reg) %>%
+    pivot_wider(names_from = mod_resp_reg, values_from = n, values_fill = 0) %>% 
     rename(reg = `1`, irreg = `0`) %>% 
     # for each rule, update rule confidence for correct and incorrect rule predictions, depending on whether we're updating that type of rule in this run
     mutate(
@@ -107,14 +112,15 @@ d %<>%
 # parameters: learning rate, which rules to use
 parameters = crossing(
   learning_rate = seq(.05,1.5,.05),
-  which_rules = c('both','regular','irregular')
+  which_rules = c('both','regular','irregular'),
+  which_responses = c('coplayer','own')
 )
 
 # iterate the learner through the parameter settings
 outcomes = parameters %>%
   rowwise() %>% 
   mutate(
-    summary = list(updateConfidence(learning_rate, which_rules))
+    summary = list(updateConfidence(learning_rate, which_rules, which_responses))
   )
 
 # unnest it
@@ -123,12 +129,12 @@ outcomes_unnested = outcomes %>%
 
 # get ten best outcomes (maybe one day I'll use this)
 best_outcomes = outcomes_unnested %>% 
-  group_by(learning_rate,which_rules) %>% 
+  group_by(learning_rate,which_rules,which_responses) %>% 
   summarise(
     cor_weight = cor(mean_reg,updated_weight)
   ) %>% 
   arrange(-cor_weight) %>% 
-  ungroup() %>% 
+  ungroup() %>%
   slice(1:10)
 
 # get bestest outcome

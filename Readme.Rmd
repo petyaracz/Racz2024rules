@@ -26,6 +26,11 @@ library(broom.mixed)
 library(performance)
 library(sjPlot)
 library(scales)
+library(googlesheets4)
+
+# -- auth -- #
+
+gs4_auth(email = 'petermartonracz@gmail.com')
 
 # -- read -- #
 
@@ -53,6 +58,22 @@ d %<>%
 
 A cognitively plausible model of people's morphophonological intuitions in a Wug task is the Minimal Generalisation Learner (MGL). The MGL looks for generalisations of the type `CAD ~ CBD`, which can be expressed as a rule `A -> B` with the structural description of `C _ D`. We can train the MGL on existing words and it will predict people's responses to nonword stimuli. Here, we explore how the MGL can include short-term learning based on nonword stimuli. We use the data collected by Rácz, Beckner, Hay & Pierrehumbert (2020), who ran a baseline Wug task and a morphological learning task (which they call the ESP task), using an artificial coplayer. Both tasks focussed on the regular / irregular variation of the English past tense.
 
+Table 1 shows an example of how the learner works.
+
+```{r learnerexample}
+t1 = d %>% 
+  filter(word == 'splink', best_rule_word_type) %>% 
+  distinct(rule_tidy,reliability,scope,hits,confidence,related_forms,exceptions) %>% 
+  mutate_if(is.double, ~ round(., 2)) %>% 
+  mutate(rule_number = 1:2) %>% 
+  relocate(rule_number, 1)
+
+# t1 %>% 
+#   write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table1')
+t1 %>% 
+  kable(digits = 2, caption = '1. Example rules for "splink"')
+```
+
 # The baseline experiment
 
 ## Nonwords
@@ -64,31 +85,39 @@ Rácz, Beckner, Hay & Pierrehumbert (2020) generated nonword verbs across four r
 - kept ([i] → [E]Ct)
 - burnt ([3]/[E]/[I] → [3]/[E]/[I]Ct)
 
-Nonwords were transcribed into the DISC phonetic alphabet. Examples are in Table 1.
+Nonwords were transcribed into the DISC phonetic alphabet. Examples are in Table 2.
 
 ```{r examples}
-d %>%
+t2 = d %>%
   mutate(word2 = glue('{word}, [{disc}]')) %>% 
   group_by(category) %>% 
   distinct(word2,category) %>% 
   sample_n(5) %>% 
   mutate(id = 1:5) %>% 
   pivot_wider(names_from = category, values_from = word2) %>% 
-  select(-id) %>% 
-  kable('simple', caption = '1. Nonword examples.')
+  select(-id) 
+
+t2 %>% 
+  write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table2')
+t2 %>% 
+  kable('simple', caption = '2. Nonword examples.')
 
 ```
 
 ## Test data
 
-202 participants, recruited on AMT, responded to the orthographic present tense form of each nonword in a simple carrier sentence in a forced-choice task. They could pick the regular or the irregular past tense form for each nonword, displayed on buttons. The regular past tense form was the -ed form. The irregular form depended on the verb class, as seen in Table 2.
+202 participants, recruited on AMT, responded to the orthographic present tense form of each nonword in a simple carrier sentence in a forced-choice task. They could pick the regular or the irregular past tense form for each nonword, displayed on buttons. The regular past tense form was the -ed form. The irregular form depended on the verb class, as seen in Table 3.
 
 ```{r examples2}
-d %>% 
+t3 = d %>% 
   distinct(category,word,regular_form,irregular_form) %>% 
   group_by(category) %>% 
-  sample_n(2) %>% 
-  kable('simple', caption = '2. Regular and irregular choices in the Wug task.')
+  sample_n(2)
+
+t3 %>% 
+  write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table3')
+t3 %>% 
+  kable('simple', caption = '3. Regular and irregular choices in the Wug task.')
 ```
 
 ## Minimal Generalisation Learner (MGL)
@@ -98,24 +127,40 @@ Rácz, Beckner, Hay and Pierrehumbert (2020) trained the Minimal Generalisation 
 The MGL generates `r length(unique(d$rule_id))` rules for the 156 target forms from the training data. Such rules have a structural description that matches a target nonword in the task and generates an output which is available to participants to pick. A rule that generates the `sing -> sang` pattern matches target forms for nonwords that look like `sing`. It generates one of the past tense forms available in the forced-choice task. A rule that generates the `sing -> sung` pattern does not generate an available past tense form.
 
 ```{r rules1}
-d %>% 
-  filter(!is.na(rule)) %>% 
-  distinct(rule,type,scope,hits,reliability,confidence) %>% 
+t4 = d %>% 
+  filter(
+    category == 'sang',
+    !is.na(rule),
+    # best_rule_word_type
+         ) %>% 
+  mutate(
+    rule_tidy = str_replace_all(rule_tidy, c('1 ' = '+', '0 ' = '-'))
+  ) %>% 
+  distinct(rule_tidy,type,scope,hits,reliability,confidence,related_forms,exceptions) %>% 
   arrange(-confidence) %>% 
-  kable('simple', caption = '3. Rules from Celex.', digits = 2)
+  mutate_if(is.double, ~ round(.,2))
+
+t4 %>% 
+  write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table4')
+t4 %>% 
+  kable('simple', caption = '4. Rules from Celex.', digits = 2)
 ```
 
-Rules take the structural description of input -> output / context. Multiple rules can apply to the same input form. For the majority of forms, there is one regular and one irregular rule available. For some, there is no irregular rule. For some, there are more regular rules. Examples can be seen in Table 4.
+Rules take the structural description of input -> output / context. Multiple rules can apply to the same input form. For the majority of forms, there is one regular and one irregular rule available. For some, there is no irregular rule. For some, there are more regular rules. Let's look at rules for the "sang" group only. Rules can be seen in Table 4. Examples can be seen in Table 5.
 
 ```{r rules2}
-d %>% 
-  distinct(word,category,type,rule_id) %>% 
-  count(word,category,type, name = 'n_rules') %>% 
-  pivot_wider(names_from = type, values_from = n_rules, values_fill = 0) %>% 
-  group_by(category,irregular,regular) %>% 
-  sample_n(1) %>% 
-  select(category,word,regular,irregular) %>% 
-  kable('simple', caption = 'Table 4. Possible number of regular / irregular rules for some forms.', digits = 2)
+t5 = d %>% 
+  filter(
+    word %in% c('shing', 'pring', 'grink'),
+    best_rule_word_type
+         ) %>% 
+  distinct(word,category,type,rule_tidy,confidence,weight) %>% 
+  mutate_if(is.double, ~ round(.,2))
+  
+t5 %>% 
+  write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table5')
+t5 %>% 
+  kable('simple', caption = 'Table 5. Best regular / irregular rules for some sang forms.', digits = 2)
 
 ```
 
@@ -138,9 +183,9 @@ p1 = d %>%
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
   theme_bw() +
-  xlab('MGL regular weight') +
+  xlab('learner regular weight') +
   ylab('log (regular/irregular), baseline task') +
-  ggtitle(glue('Words: Word ratings and MGL weights (r = {cor}).'))
+  ggtitle(glue('Words: Word ratings and regular weights (r = {cor}).'))
 
 p2 = d %>% 
   filter(best_rule_word_type) %>% 
@@ -153,7 +198,7 @@ p2 = d %>%
   theme_bw() +
   theme(axis.title.y = element_blank(), axis.ticks.y = element_blank(), axis.text.y = element_blank()) +
   scale_colour_viridis_d(option = 'cividis') +
-  xlab('MGL rule confidence') +
+  xlab('learner rule confidence') +
   labs(colour = 'rule type') +
   ggtitle('Words: Word ratings and regular / irregular rule confidence (rescaled)')
 
@@ -247,10 +292,11 @@ p3 = d %>%
   geom_smooth(method = 'loess') +
   theme_bw() +
   scale_colour_viridis_d(option = 'viridis') +
-  xlab('MGL regular weight') +
-  ylab('log (regular/irregular), posttest') +
+  xlab('learner regular weight') +
+  # ylab('log (regular/irregular), posttest') +
+  ylab('') +
   labs(colour = 'coplayer\ndistribution') +
-  ggtitle('Words: Word ratings and MGL weights')
+  ggtitle('Words: Word ratings and learner weights')
 
 p4 = d %>%
   filter(
@@ -267,7 +313,7 @@ p4 = d %>%
   geom_smooth(method = 'loess') +
   theme_bw() +
   scale_colour_viridis_d(option = 'cividis') +
-  xlab('MGL rule confidence') +
+  xlab('learner rule confidence') +
   ylab('log (regular/irregular), posttest') +
   labs(colour = 'rule type') +
   facet_wrap( ~ reg_dist) +
@@ -288,13 +334,14 @@ p5 = d %>%
   geom_smooth(method = 'loess') +
   theme_bw() +
   scale_colour_viridis_d(option = 'cividis') +
-  xlab('MGL rule confidence') +
-  ylab('log (regular/irregular), posttest') +
+  xlab('learner rule confidence') +
+  # ylab('log (regular/irregular), posttest') +
+  ylab('') +
   labs(colour = 'rule type') +
   facet_wrap( ~ reg_dist) +
   ggtitle('Rules: Word ratings and regular / irregular rule confidence (rescaled)')
 
-(p3 + plot_spacer()) / p4 / p5 + plot_annotation('Figure 3. ESP posttest: Word ratings in posttest\nand MGL weights.')
+(p3 + plot_spacer()) / p4 / p5 + plot_annotation('Figure 3. ESP posttest: Word ratings in posttest\nand learner weights.')
   
 ```
 
@@ -323,9 +370,9 @@ p6 = trials %>%
   facet_wrap( ~ reg_dist) +
   scale_colour_viridis_d(option = 'viridis') +
   xlab('ESP trial') +
-  ylab('correlation of\nMGL regular weight and\nregular response') +
+  ylab('correlation of\nlearner regular weight and\nregular response') +
   labs(colour = 'coplayer\ndistribution') +
-  ggtitle('ESP trajectories for MGL weight\ncorrelation with responses')
+  ggtitle('ESP trajectories for learner weight\ncorrelation with responses')
 
 p7 = trials %>% 
   mutate(irregular = abs(irregular0)) %>% 
@@ -337,9 +384,9 @@ p7 = trials %>%
   scale_colour_viridis_d(option = 'cividis') +
   facet_wrap( ~ reg_dist) +
   xlab('ESP trial') +
-  ylab('correlation of\nMGL rule confidence and\nregular response') +
+  ylab('correlation of\nlearner rule confidence and\nregular response') +
   labs(colour = 'rule type') +
-  ggtitle('ESP trajectories for MGL regular/irregular confidence\ncorrelation with responses')
+  ggtitle('ESP trajectories for learner regular/irregular confidence\ncorrelation with responses')
 
 p6 / p7 + plot_annotation(title = 'Figure 4. Rule weight and confidence across ESP.')
 
@@ -355,19 +402,23 @@ The MGL can capture this shift through rules or minimal generalisations. Partici
 
 rule_table = d %>% 
   filter(
+    category == 'sang',
     best_rule_word_type,
     phase != 'pretest',
     !is.na(rule)
          ) %>% 
   filter(participant_id == 's6023') %>% 
-  distinct(phase,rule,rule_id,type,scope) %>% 
-  group_by(rule,rule_id,type,scope) %>% 
+  distinct(phase,rule_tidy,rule_id,type,scope) %>% 
+  group_by(rule_tidy,rule_id,type,scope) %>% 
   arrange(phase) %>% 
   summarise(phase = paste(phase, collapse = ', ')) %>%
   mutate(phase = factor(phase, levels = c('esp, posttest', 'esp', 'posttest'))) %>% 
   ungroup() %>% 
   select(-rule_id) %>% 
-  arrange(phase,-scope)
+  arrange(phase,-scope) %>% 
+  mutate(
+    rule_tidy = str_replace_all(rule_tidy, c('1 ' = '+', '0 ' = '-'))
+  )
 
 r1 = nrow(rule_table[rule_table$phase =='esp, posttest',])
 r2 = nrow(rule_table[rule_table$phase =='esp',])
@@ -378,77 +429,42 @@ r6 = nrow(rule_table[rule_table$phase == 'esp, posttest' & rule_table$type == 'r
 r7 = nrow(rule_table[rule_table$phase != 'esp, posttest' & rule_table$type == 'regular',])
 
 rule_table %>%
-  kable('simple', caption = 'Table 5. Rule overlaps for one participant', digits = 2)
+  write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table6')
+
+rule_table %>%
+  kable('simple', caption = 'Table 6. Rule overlaps for one participant (sang verbs)', digits = 2)
 
 ```
 
-To illustrate this point, we show one participant in Table 5. Taken together, `r r1+r2+r3` relevant rules apply to the 104 verbs that our participant sees in the ESP task and the posttest. `r r1` rules overlap: they apply to some verbs in both tasks. `r r2` rules only apply to verbs in the ESP task. Following the MGL logic, whatever the participant learned about these verbs won't carry over to the posttest. `r r3` rules only apply to verbs in the posttest. The participant didn't learn anything new about these verbs. Unsurprisingly, the rules that overlap have much larger scopes (a mean of `r r4`) than those which do not (a mean of `r r5`). `r r6` overlapping rules are regular, only `r r7` non-overlapping rule is regular.
+To illustrate this point, we show one participant and one category, 'sang', in Table 6. Taken together, `r r1+r2+r3` relevant rules apply to the 104 verbs that our participant sees in the ESP task and the posttest. `r r1` rules overlap: they apply to some verbs in both tasks. `r r2` rules only apply to verbs in the ESP task. Following the MGL logic, whatever the participant learned about these verbs won't carry over to the posttest. `r r3` rules only apply to verbs in the posttest. The participant didn't learn anything new about these verbs. Unsurprisingly, the rules that overlap have much larger scopes (a mean of `r r4`) than those which do not (a mean of `r r5`). `r r6` overlapping rules are regular, only `r r7` non-overlapping rule is regular.
 
 This suggests that whatever the participant learns about the regular rules will be far more influential in the posttest than what they learn about irregular rules.
 
-One way to express this learning is to adjust rule confidence for rules in the ESP task. We will do this in the following way: For each participant and rule in the ESP task, we tally the number of regular and irregular responses by the participant in the ESP task. We do this for the reversed condition only.
+One way to express learning is to adjust rule confidence for rules in the ESP task. We will do this in the following way: For each participant and rule in the ESP task, we tally the number of regular and irregular responses by the participant in the ESP task. We do this for the reversed condition only.
 
 If the rule is regular, it works very well if every verb it applies gets a regular response. For every regular response, the rule is rewarded. For every irregular response, the rule incurs a penalty. If the rule is irregular, all the verbs in its scope should be irregular. For every irregular response, the rule is rewarded. For every regular response, the rule incurs a penalty.
 
 These total rewards and penalties are used to update the rule's confidence. If the participant starts the ESP task with a very strong regular rule but keeps picking irregular forms for verbs in the rule's scope, the rule's confidence is steadily demoted. If the rule works well across the task, its confidence will increase. The rate of this increase / decrease is controlled by the parameter `learning rate`, which ranges between 0.05 and 1.5, with a .05 step, resulting in 90 fits of the learner. We fit the rule updater in three configurations: (i) updating both regular and irregular rules, (ii) updating regular rules only, (iii) updating irregular rules only.
 
 ```{r rulemove1, fig.width = 9, fig.height = 4}
-
-base_cor = d %>%
-    filter(
-      phase == 'esp',
-      reg_dist == 'reversed'
-    ) %>% 
-  group_by(word,weight) %>% 
-  summarise(
-    mean_reg = mean(resp_reg)
+outcomes %>% 
+  mutate(
+    which_responses = glue('{which_responses} responses'),
+    which_rules = glue('{which_rules} rules'),
+    which_responses = factor(which_responses, levels = c('own responses','coplayer responses')),
+    which_rules = factor(which_rules, levels = c('regular rules','irregular rules','both rules'))
   ) %>% 
-  ungroup() %>% 
-  summarise(cor = cor(weight,mean_reg)) %>% 
-  pull(cor)
-
-p6 = outcomes %>% 
-  filter(which_rules == 'both') %>% 
   ggplot() +
-  geom_smooth(aes(weight,mean_reg), method = 'loess', colour = 'lightgrey') +
+  geom_smooth(aes(weight,mean_reg), method = 'loess', colour = 'lightgreen') +
   geom_smooth(aes(updated_weight,mean_reg,colour = as.factor(learning_rate)), method = 'loess', se = F) +
   scale_colour_viridis_d(option = 'inferno') +
   theme_bw() +
-  xlab('MGL weight (grey: original, colour: updated') +
+  xlab('MGL weight (grey: original, colour: updated)') +
   ylab('Mean regularisation in reversed posttest') +
-  ggtitle('Tuning both rules\non the ESP task') +
-  coord_cartesian(ylim = c(.15,.65), xlim = c(.35,1)) +
-  guides(colour = 'none')
-
-p7 = outcomes %>% 
-  filter(which_rules == 'regular') %>% 
-  ggplot() +
-  geom_smooth(aes(weight,mean_reg), method = 'loess', colour = 'lightgrey') +
-  geom_smooth(aes(updated_weight,mean_reg,colour = as.factor(learning_rate)), method = 'loess', se = F) +
-  scale_colour_viridis_d(option = 'inferno') +
-  theme_bw() +
-  xlab('MGL weight (grey: original, colour: updated') +
-  ylab('Mean regularisation in reversed posttest') +
-  ggtitle('Tuning the regular rule\non the ESP task') +
-  coord_cartesian(ylim = c(.15,.65), xlim = c(.35,1)) +
-  guides(colour = 'none') +
-  theme(axis.title.y = element_blank(), axis.ticks.y = element_blank(), axis.text.y = element_blank())
-
-p8 = outcomes %>% 
-  filter(which_rules == 'irregular') %>% 
-  ggplot() +
-  geom_smooth(aes(weight,mean_reg), method = 'loess', colour = 'lightgrey') +
-  geom_smooth(aes(updated_weight,mean_reg,colour = as.factor(learning_rate)), method = 'loess', se = F) +
-  scale_colour_viridis_d(option = 'inferno') +
-  theme_bw() +
-  xlab('MGL weight (grey: original, colour: updated') +
-  ylab('Mean regularisation in reversed posttest') +
-  ggtitle('Tuning the irregular rule\non the ESP task') +
-  coord_cartesian(ylim = c(.15,.65), xlim = c(.35,1)) +
-  guides(colour = 'none') +
-  theme(axis.title.y = element_blank(), axis.ticks.y = element_blank(), axis.text.y = element_blank())
-
-p6 + p7 + p8 + plot_annotation(title = 'Figure 5. Updated rule confidence and predictive accuracy in the posttest.')
+  # ggtitle('Tuning rules\non the ESP task') +
+  facet_wrap( ~ which_responses + which_rules, ncol = 3) +
+  coord_cartesian(ylim = c(.25,.65), xlim = c(.15,1)) +
+  guides(colour = 'none') + plot_annotation(title = 'Figure 5. Updated rule confidence and predictive accuracy in the posttest.')
 ```
 
 Figure 5 shows how the updated rules fare in the reversed condition posttest. The y axis shows mean participant regularisation, the x axis shows MGL regular weight for words in the posttest. We only show loess smooths of posttest regularisation and MGL weight. The grey trajectory is the accuracy of the original MGL's regular weights. Each coloured smooth shows weights from one updated MGL. Colour shows the learning rate: darker colours mean that each ESP response updated the relevant rules to a small extent, lighter colours, to a large extent. The three panels show how the updated models change in accuracy if we update both rules (left), the regular rule only (middle), and the irregular rule only (right). 
