@@ -1,0 +1,4 @@
+1. compare levelling and vd and show that vd is super noisy using cogsci paper
+2. demonstrate effectiveness of NB trained on nsyl and ending on levelling compared to cogsci paper. train NB using learning rate parameter space
+3. do NB on test + posttest, levelling only. do baseline + test-based: computer, player, player correct, reverse player incorrect
+4. profit?
