@@ -34,11 +34,11 @@ gs4_auth(email = 'petermartonracz@gmail.com')
 
 # -- read -- #
 
-# esp data with baseline word log odds and rules
+# esp data with baseline word log odds and rules, made by scripts/compile_data.R
 d = read_tsv('dat/exp_data_with_rules.gz')
-# modelling outcomes, all of them
+# modelling outcomes, all of them, made by scripts/learner.R
 outcomes = read_tsv('dat/modelling_outcomes.tsv')
-# best modelling outcome according to correlation of word weight and word mean resp
+# best modelling outcome according to correlation of word weight and word mean resp, made by scripts/learner.R
 best_outcome = read_tsv('dat/modelling_best_outcome.tsv')
 
 # -- wrangle -- #
@@ -61,16 +61,16 @@ A cognitively plausible model of people's morphophonological intuitions in a Wug
 Table 1 shows an example of how the learner works.
 
 ```{r learnerexample}
-t1 = d %>% 
-  filter(word == 'splink', best_rule_word_type) %>% 
-  distinct(rule_tidy,reliability,scope,hits,confidence,related_forms,exceptions) %>% 
-  mutate_if(is.double, ~ round(., 2)) %>% 
-  mutate(rule_number = 1:2) %>% 
+t1 = d |> 
+  filter(word == 'splink', best_rule_word_type) |> 
+  distinct(rule_tidy,reliability,scope,hits,confidence,related_forms,exceptions) |> 
+  mutate_if(is.double, ~ round(., 2)) |> 
+  mutate(rule_number = 1:2) |> 
   relocate(rule_number, 1)
 
-# t1 %>% 
+# t1 |> 
 #   write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table1')
-t1 %>% 
+t1 |> 
   kable(digits = 2, caption = '1. Example rules for "splink"')
 ```
 
@@ -88,18 +88,18 @@ Rácz, Beckner, Hay & Pierrehumbert (2020) generated nonword verbs across four r
 Nonwords were transcribed into the DISC phonetic alphabet. Examples are in Table 2.
 
 ```{r examples}
-t2 = d %>%
-  mutate(word2 = glue('{word}, [{disc}]')) %>% 
-  group_by(category) %>% 
-  distinct(word2,category) %>% 
-  sample_n(5) %>% 
-  mutate(id = 1:5) %>% 
-  pivot_wider(names_from = category, values_from = word2) %>% 
+t2 = d |>
+  mutate(word2 = glue('{word}, [{disc}]')) |> 
+  group_by(category) |> 
+  distinct(word2,category) |> 
+  sample_n(5) |> 
+  mutate(id = 1:5) |> 
+  pivot_wider(names_from = category, values_from = word2) |> 
   select(-id) 
 
-t2 %>% 
+t2 |> 
   write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table2')
-t2 %>% 
+t2 |> 
   kable('simple', caption = '2. Nonword examples.')
 
 ```
@@ -109,14 +109,14 @@ t2 %>%
 202 participants, recruited on AMT, responded to the orthographic present tense form of each nonword in a simple carrier sentence in a forced-choice task. They could pick the regular or the irregular past tense form for each nonword, displayed on buttons. The regular past tense form was the -ed form. The irregular form depended on the verb class, as seen in Table 3.
 
 ```{r examples2}
-t3 = d %>% 
-  distinct(category,word,regular_form,irregular_form) %>% 
-  group_by(category) %>% 
+t3 = d |> 
+  distinct(category,word,regular_form,irregular_form) |> 
+  group_by(category) |> 
   sample_n(2)
 
-t3 %>% 
+t3 |> 
   write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table3')
-t3 %>% 
+t3 |> 
   kable('simple', caption = '3. Regular and irregular choices in the Wug task.')
 ```
 
@@ -127,39 +127,39 @@ Rácz, Beckner, Hay and Pierrehumbert (2020) trained the Minimal Generalisation 
 The MGL generates `r length(unique(d$rule_id))` rules for the 156 target forms from the training data. Such rules have a structural description that matches a target nonword in the task and generates an output which is available to participants to pick. A rule that generates the `sing -> sang` pattern matches target forms for nonwords that look like `sing`. It generates one of the past tense forms available in the forced-choice task. A rule that generates the `sing -> sung` pattern does not generate an available past tense form.
 
 ```{r rules1}
-t4 = d %>% 
+t4 = d |> 
   filter(
     category == 'sang',
     !is.na(rule),
     # best_rule_word_type
-         ) %>% 
+         ) |> 
   mutate(
     rule_tidy = str_replace_all(rule_tidy, c('1 ' = '+', '0 ' = '-'))
-  ) %>% 
-  distinct(rule_tidy,type,scope,hits,reliability,confidence,related_forms,exceptions) %>% 
-  arrange(-confidence) %>% 
+  ) |> 
+  distinct(rule_tidy,type,scope,hits,reliability,confidence,related_forms,exceptions) |> 
+  arrange(-confidence) |> 
   mutate_if(is.double, ~ round(.,2))
 
-t4 %>% 
+t4 |> 
   write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table4')
-t4 %>% 
+t4 |> 
   kable('simple', caption = '4. Rules from Celex.', digits = 2)
 ```
 
 Rules take the structural description of input -> output / context. Multiple rules can apply to the same input form. For the majority of forms, there is one regular and one irregular rule available. For some, there is no irregular rule. For some, there are more regular rules. Let's look at rules for the "sang" group only. Rules can be seen in Table 4. Examples can be seen in Table 5.
 
 ```{r rules2}
-t5 = d %>% 
+t5 = d |> 
   filter(
     word %in% c('shing', 'pring', 'grink'),
     best_rule_word_type
-         ) %>% 
-  distinct(word,category,type,rule_tidy,confidence,weight) %>% 
+         ) |> 
+  distinct(word,category,type,rule_tidy,confidence,weight) |> 
   mutate_if(is.double, ~ round(.,2))
   
-t5 %>% 
+t5 |> 
   write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table5')
-t5 %>% 
+t5 |> 
   kable('simple', caption = 'Table 5. Best regular / irregular rules for some sang forms.', digits = 2)
 
 ```
@@ -169,16 +169,16 @@ Following both Rácz, Beckner, Hay & Pierrehumbert (2020) and Albright & Hayes (
 ## Results
 
 ```{r baseline_156, fig.width = 7, fig.height = 3}
-cor = d %>% 
-  distinct(word,baseline_log_odds_regular,weight) %>% 
+cor = d |> 
+  distinct(word,baseline_log_odds_regular,weight) |> 
   summarise(
     cor = cor(baseline_log_odds_regular,weight)
-  ) %>% 
-  pull(cor) %>% 
+  ) |> 
+  pull(cor) |> 
   round(2)
 
-p1 = d %>% 
-  distinct(word,baseline_log_odds_regular,weight) %>% 
+p1 = d |> 
+  distinct(word,baseline_log_odds_regular,weight) |> 
   ggplot(aes(weight,baseline_log_odds_regular)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -187,11 +187,11 @@ p1 = d %>%
   ylab('log (regular/irregular), baseline task') +
   ggtitle(glue('Words: Word ratings and regular weights (r = {cor}).'))
 
-p2 = d %>% 
-  filter(best_rule_word_type) %>% 
-  distinct(word,baseline_log_odds_regular,type,confidence) %>% 
-  group_by(type) %>% 
-  mutate(scaled_confidence = rescale(confidence)) %>% 
+p2 = d |> 
+  filter(best_rule_word_type) |> 
+  distinct(word,baseline_log_odds_regular,type,confidence) |> 
+  group_by(type) |> 
+  mutate(scaled_confidence = rescale(confidence)) |> 
   ggplot(aes(scaled_confidence,baseline_log_odds_regular,colour = type)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -224,13 +224,13 @@ Coplayers varied across two conditions. In terms of (A) rate of regularisation, 
 Rácz, Beckner, Hay & Pierrehumbert (2020) found that the coplayer changed participant behaviour. Nonword ratings shifted from the pretest to the posttest. If participants rated words as highly regular in the pretest, they rated these more irregular in the posttest, after interacting with the reversed versus the typical coplayer. Since no participant saw the same verb twice, this effect was due to lexical, rather than word priming. The reversed coplayer used verbs in a certain way, and the participant rated similar verbs in the posttest in a certain way. The difference with the random coplayer was less clearcut. This can be seen in Figure 2.
 
 ```{r mainres1, fig.width = 4, fig.height = 3}
-d %>%
-  filter(phase != 'esp') %>% 
-  count(word,reg_dist,phase,resp_reg) %>% 
-  pivot_wider(names_from = resp_reg, values_from = n) %>% 
-  mutate(log_odds = log(`1`/`0`)) %>%
-  select(word,reg_dist,phase,log_odds) %>% 
-  pivot_wider(names_from = phase, values_from = log_odds) %>% 
+d |>
+  filter(phase != 'esp') |> 
+  count(word,reg_dist,phase,resp_reg) |> 
+  pivot_wider(names_from = resp_reg, values_from = n) |> 
+  mutate(log_odds = log(`1`/`0`)) |>
+  select(word,reg_dist,phase,log_odds) |> 
+  pivot_wider(names_from = phase, values_from = log_odds) |> 
   ggplot(aes(pretest,posttest,colour = reg_dist)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'lm') +
@@ -246,7 +246,7 @@ d %>%
 Figure 2 compares response log odds in the pretest and the posttest. These are correlated: participants make similar choices at the beginning of the experiment and at the end, after encountering the coplayer. However, this correlation is weaker if participants played a reversed coplayer, demonstrating the coplayer's influence.
 
 ```{r posttest_models, eval = F}
-dwp = dw %>% 
+dwp = dw |> 
   filter(phase == 'posttest')
 
 glmm1 = glmer(resp_reg ~ 1 + reg_dist * reg_rate * weight + (1|participant_id) + (1|word), data = dw, family = binomial, control = glmerControl(optimizer="bobyqa", optCtrl=list(maxfun=20000)))
@@ -282,11 +282,11 @@ The main effect of interest is coplayer lexical distribution. The MGL weight has
 
 ```{r mglbreakdown1, fig.width = 7, fig.height = 12}
 
-p3 = d %>%
-  filter(phase == 'posttest') %>% 
-  count(word,reg_dist,weight,resp_reg) %>% 
-  pivot_wider(names_from = resp_reg, values_from = n) %>% 
-  mutate(log_odds = log(`1`/`0`)) %>%
+p3 = d |>
+  filter(phase == 'posttest') |> 
+  count(word,reg_dist,weight,resp_reg) |> 
+  pivot_wider(names_from = resp_reg, values_from = n) |> 
+  mutate(log_odds = log(`1`/`0`)) |>
   ggplot(aes(weight,log_odds,colour = reg_dist)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -298,16 +298,16 @@ p3 = d %>%
   labs(colour = 'coplayer\ndistribution') +
   ggtitle('Words: Word ratings and learner weights')
 
-p4 = d %>%
+p4 = d |>
   filter(
     phase == 'posttest',
     best_rule_word_type
-         ) %>% 
-  count(word,reg_dist,rule,rule_id,confidence,type,resp_reg) %>% 
-  pivot_wider(names_from = resp_reg, values_from = n) %>% 
-  mutate(log_odds = log(`1`/`0`)) %>%
-  group_by(type) %>% 
-  mutate(scaled_confidence = rescale(confidence)) %>% 
+         ) |> 
+  count(word,reg_dist,rule,rule_id,confidence,type,resp_reg) |> 
+  pivot_wider(names_from = resp_reg, values_from = n) |> 
+  mutate(log_odds = log(`1`/`0`)) |>
+  group_by(type) |> 
+  mutate(scaled_confidence = rescale(confidence)) |> 
   ggplot(aes(scaled_confidence,log_odds,colour = type)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -319,16 +319,16 @@ p4 = d %>%
   facet_wrap( ~ reg_dist) +
   ggtitle('Words: Word ratings and regular / irregular rule confidence (rescaled)')
 
-p5 = d %>%
+p5 = d |>
   filter(
     phase == 'posttest',
     best_rule_word_type
-         ) %>% 
-  count(reg_dist,rule,rule_id,confidence,type,resp_reg) %>% 
-  pivot_wider(names_from = resp_reg, values_from = n) %>% 
-  mutate(log_odds = log(`1`/`0`)) %>%
-  group_by(type) %>% 
-  mutate(scaled_confidence = rescale(confidence)) %>% 
+         ) |> 
+  count(reg_dist,rule,rule_id,confidence,type,resp_reg) |> 
+  pivot_wider(names_from = resp_reg, values_from = n) |> 
+  mutate(log_odds = log(`1`/`0`)) |>
+  group_by(type) |> 
+  mutate(scaled_confidence = rescale(confidence)) |> 
   ggplot(aes(scaled_confidence,log_odds,colour = type)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -353,17 +353,17 @@ Posttest patterns come to existence during the interactive session with the copl
 
 ```{r mglbreakdown2, fig.width = 7, fig.height = 6}
 
-trials = d %>% 
-  filter(phase == 'esp') %>% 
-  arrange(trial_index) %>% 
-  group_by(trial_index,reg_dist) %>% 
+trials = d |> 
+  filter(phase == 'esp') |> 
+  arrange(trial_index) |> 
+  group_by(trial_index,reg_dist) |> 
   summarise(
     corw = cor(resp_reg,weight, method = 'pearson'),
     regular = cor(resp_reg,regular, method = 'pearson'),
     irregular0 = cor(resp_reg,irregular, method = 'pearson')
   )
 
-p6 = trials %>% 
+p6 = trials |> 
   ggplot(aes(trial_index,corw,colour = reg_dist)) +
   geom_smooth(method = 'loess') +
   theme_bw() +
@@ -374,10 +374,10 @@ p6 = trials %>%
   labs(colour = 'coplayer\ndistribution') +
   ggtitle('ESP trajectories for learner weight\ncorrelation with responses')
 
-p7 = trials %>% 
-  mutate(irregular = abs(irregular0)) %>% 
-  select(trial_index,reg_dist,regular,irregular) %>% 
-  pivot_longer(c(regular,irregular), names_to = 'type') %>% 
+p7 = trials |> 
+  mutate(irregular = abs(irregular0)) |> 
+  select(trial_index,reg_dist,regular,irregular) |> 
+  pivot_longer(c(regular,irregular), names_to = 'type') |> 
   ggplot(aes(trial_index,value,colour = type)) +
   geom_smooth(method = 'loess') +
   theme_bw() +
@@ -400,22 +400,22 @@ The MGL can capture this shift through rules or minimal generalisations. Partici
 
 ```{r ruleoverlap}
 
-rule_table = d %>% 
+rule_table = d |> 
   filter(
     category == 'sang',
     best_rule_word_type,
     phase != 'pretest',
     !is.na(rule)
-         ) %>% 
-  filter(participant_id == 's6023') %>% 
-  distinct(phase,rule_tidy,rule_id,type,scope) %>% 
-  group_by(rule_tidy,rule_id,type,scope) %>% 
-  arrange(phase) %>% 
-  summarise(phase = paste(phase, collapse = ', ')) %>%
-  mutate(phase = factor(phase, levels = c('esp, posttest', 'esp', 'posttest'))) %>% 
-  ungroup() %>% 
-  select(-rule_id) %>% 
-  arrange(phase,-scope) %>% 
+         ) |> 
+  filter(participant_id == 's6023') |> 
+  distinct(phase,rule_tidy,rule_id,type,scope) |> 
+  group_by(rule_tidy,rule_id,type,scope) |> 
+  arrange(phase) |> 
+  summarise(phase = paste(phase, collapse = ', ')) |>
+  mutate(phase = factor(phase, levels = c('esp, posttest', 'esp', 'posttest'))) |> 
+  ungroup() |> 
+  select(-rule_id) |> 
+  arrange(phase,-scope) |> 
   mutate(
     rule_tidy = str_replace_all(rule_tidy, c('1 ' = '+', '0 ' = '-'))
   )
@@ -428,10 +428,10 @@ r5 = round(mean(rule_table[rule_table$phase !='esp, posttest',]$scope),0)
 r6 = nrow(rule_table[rule_table$phase == 'esp, posttest' & rule_table$type == 'regular',])
 r7 = nrow(rule_table[rule_table$phase != 'esp, posttest' & rule_table$type == 'regular',])
 
-rule_table %>%
+rule_table |>
   write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table6')
 
-rule_table %>%
+rule_table |>
   kable('simple', caption = 'Table 6. Rule overlaps for one participant (sang verbs)', digits = 2)
 
 ```
@@ -447,13 +447,13 @@ If the rule is regular, it works very well if every verb it applies gets a regul
 These total rewards and penalties are used to update the rule's confidence. If the participant starts the ESP task with a very strong regular rule but keeps picking irregular forms for verbs in the rule's scope, the rule's confidence is steadily demoted. If the rule works well across the task, its confidence will increase. The rate of this increase / decrease is controlled by the parameter `learning rate`, which ranges between 0.05 and 1.5, with a .05 step, resulting in 90 fits of the learner. We fit the rule updater in three configurations: (i) updating both regular and irregular rules, (ii) updating regular rules only, (iii) updating irregular rules only.
 
 ```{r rulemove1, fig.width = 9, fig.height = 4}
-outcomes %>% 
+outcomes |> 
   mutate(
     which_responses = glue('{which_responses} responses'),
     which_rules = glue('{which_rules} rules'),
     which_responses = factor(which_responses, levels = c('own responses','coplayer responses')),
     which_rules = factor(which_rules, levels = c('regular rules','irregular rules','both rules'))
-  ) %>% 
+  ) |> 
   ggplot() +
   geom_smooth(aes(weight,mean_reg), method = 'loess', colour = 'lightgreen') +
   geom_smooth(aes(updated_weight,mean_reg,colour = as.factor(learning_rate)), method = 'loess', se = F) +
@@ -480,11 +480,11 @@ We also tested the MGL on results from a morphological convergence experiment in
 Since the MGL was trained on real verbs which comprise a typical lexical distribution, its predictions will be less accurate when measured against participant choices after participants have been exposed to a coplayer who reverses the typical distribution. We can tune the MGL to better fit participant responses by using data from the participant's interaction with the coplayer and updating each MGL rule based on participant choices during this interaction.
 
 ```{r regulars_lol}
-percent_irreg = d %>% 
-  distinct(word,baseline_log_odds_regular) %>% 
-  summarise(mean = mean(-baseline_log_odds_regular)) %>% 
-  pull() %>% 
-  plogis() %>% 
+percent_irreg = d |> 
+  distinct(word,baseline_log_odds_regular) |> 
+  summarise(mean = mean(-baseline_log_odds_regular)) |> 
+  pull() |> 
+  plogis() |> 
   round(2)
 
 percent_irreg = percent_irreg * 100

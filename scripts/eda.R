@@ -1,4 +1,4 @@
-# eda
+# building fig/fig1
 
 setwd('~/Github/Racz2024rules')
 
@@ -26,19 +26,19 @@ d %<>%
     lex_typicality = factor(lex_typicality, levels = c('random', 'atypical', 'typical'))
   )
 
-w = b %>%
+w = b |>
   select(word,regular,irregular,weight)
 
-l = w %>% 
-  pivot_longer(c(regular,irregular)) %>% 
-  group_by(name) %>% 
-  mutate(scaled_value = scales::rescale(value)) %>% 
+l = w |> 
+  pivot_longer(c(regular,irregular)) |> 
+  group_by(name) |> 
+  mutate(scaled_value = scales::rescale(value)) |> 
   ungroup()
 
-avgs = d %>% 
-  count(word,phase,reg_rate,lex_typicality,resp_reg) %>% 
-  pivot_wider(names_from = resp_reg, values_from = n, values_fill = 0) %>% 
-  mutate(test_log_odds = log((`1`+1)/(`0`+1))) %>% 
+avgs = d |> 
+  count(word,phase,reg_rate,lex_typicality,resp_reg) |> 
+  pivot_wider(names_from = resp_reg, values_from = n, values_fill = 0) |> 
+  mutate(test_log_odds = log((`1`+1)/(`0`+1))) |> 
   select(-`0`,-`1`)
 
 # -- main -- #
@@ -46,7 +46,7 @@ avgs = d %>%
 # rule weights #
 
 ## baseline
-p_b_w = b %>% 
+p_b_w = b |> 
   ggplot(aes(weight,baseline_log_odds_regular)) +
   geom_point(alpha = .5) +
   theme_bw() +
@@ -58,9 +58,9 @@ p_b_w = b %>%
   ggtitle('baseline')
 
 ## pre-test
-p_t1_w = avgs %>% 
-  filter(phase == 'test1') %>% 
-  left_join(w) %>%
+p_t1_w = avgs |> 
+  filter(phase == 'test1') |> 
+  left_join(w) |>
   ggplot(aes(weight,test_log_odds)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -70,9 +70,9 @@ p_t1_w = avgs %>%
   ggtitle('pretest')
 
 ## post-test
-p_t2_w = avgs %>% 
-  filter(phase == 'test2') %>% 
-  left_join(w) %>%
+p_t2_w = avgs |> 
+  filter(phase == 'test2') |> 
+  left_join(w) |>
   ggplot(aes(weight,test_log_odds, colour = lex_typicality)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -86,9 +86,9 @@ p_t2_w = avgs %>%
 # best rules #
 
 ## baseline
-p_b_r = b %>% 
-  select(word,baseline_log_odds_regular) %>% 
-  left_join(l) %>% 
+p_b_r = b |> 
+  select(word,baseline_log_odds_regular) |> 
+  left_join(l) |> 
   ggplot(aes(scaled_value,baseline_log_odds_regular,colour=name)) +
   geom_point(alpha = .5) +
   theme_bw() +
@@ -101,9 +101,9 @@ p_b_r = b %>%
   ggtitle('baseline')
 
 ## pre-test
-p_t1_r = avgs %>% 
-  filter(phase == 'test1') %>% 
-  left_join(l) %>% 
+p_t1_r = avgs |> 
+  filter(phase == 'test1') |> 
+  left_join(l) |> 
   ggplot(aes(scaled_value,test_log_odds, colour = name)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -115,9 +115,9 @@ p_t1_r = avgs %>%
   ggtitle('pretest')
 
 ## post-test
-p_t2_r = avgs %>% 
-  filter(phase == 'test2') %>% 
-  left_join(l) %>% 
+p_t2_r = avgs |> 
+  filter(phase == 'test2') |> 
+  left_join(l) |> 
   ggplot(aes(scaled_value,test_log_odds, colour = name)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -130,28 +130,28 @@ p_t2_r = avgs %>%
 
 # weight trajectory #
 
-trials = d %>% 
-  left_join(w) %>% 
-  arrange(overall_index) %>% 
-  group_by(overall_index,reg_rate,lex_typicality,phase,trial_index) %>% 
+trials = d |> 
+  left_join(w) |> 
+  arrange(overall_index) |> 
+  group_by(overall_index,reg_rate,lex_typicality,phase,trial_index) |> 
   nest()
 
-estimates_trials = trials %>% 
+estimates_trials = trials |> 
   mutate(
     glm = map(data, ~
                 glm(resp_reg ~ 1 + weight, family = binomial, data = .)
                 ),
     tidy = map(glm, ~ tidy(., conf.int = T))
-  ) %>% 
-  select(-data,-glm) %>% 
-  unnest(tidy) %>% 
+  ) |> 
+  select(-data,-glm) |> 
+  unnest(tidy) |> 
   filter(
     term == 'weight',
     !overall_index %in% c(79,91) # silly fits
          )
 
-p_e_w = estimates_trials %>% 
-  filter(phase == 'esp') %>% 
+p_e_w = estimates_trials |> 
+  filter(phase == 'esp') |> 
   ggplot(aes(trial_index,statistic, colour = reg_rate)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -164,33 +164,33 @@ p_e_w = estimates_trials %>%
 
 # best rule trajectory #
 
-trials2 = d %>% 
-  left_join(l) %>% 
-  arrange(overall_index) %>% 
-  group_by(overall_index,reg_rate,lex_typicality,phase,trial_index,name) %>% 
+trials2 = d |> 
+  left_join(l) |> 
+  arrange(overall_index) |> 
+  group_by(overall_index,reg_rate,lex_typicality,phase,trial_index,name) |> 
   nest()
 
-estimates_trials2 = trials2 %>% 
+estimates_trials2 = trials2 |> 
   mutate(
     glm = map(data, ~
                 glm(resp_reg ~ 1 + scaled_value, family = binomial, data = .)
     ),
     tidy = map(glm, ~ tidy(., conf.int = T))
-  ) %>% 
-  select(-data,-glm) %>% 
-  unnest(tidy) %>% 
+  ) |> 
+  select(-data,-glm) |> 
+  unnest(tidy) |> 
   filter(
     term == 'scaled_value',
     # !overall_index %in% c(79,91) # silly fits
-  ) %>% 
+  ) |> 
   mutate(abs_statistic = case_when(
       name == 'irregular' ~ -statistic,
       name == 'regular' ~ statistic
     )
   )
 
-p_e_r = estimates_trials2 %>% 
-  filter(phase == 'esp') %>%
+p_e_r = estimates_trials2 |> 
+  filter(phase == 'esp') |>
   ggplot(aes(trial_index,abs_statistic, colour = name)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -201,8 +201,8 @@ p_e_r = estimates_trials2 %>%
   ylab('figure out what THIS is and win a coconut') +
   ggtitle('esp')
 
-p_e_r2 = estimates_trials2 %>% 
-  filter(phase == 'esp') %>%
+p_e_r2 = estimates_trials2 |> 
+  filter(phase == 'esp') |>
   ggplot(aes(trial_index,abs_statistic, colour = name)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'loess') +
@@ -213,9 +213,9 @@ p_e_r2 = estimates_trials2 %>%
   ylab('figure out what THIS is and win a coconut (abs)') +
   ggtitle('esp')
 
-p_t2_w2 = avgs %>% 
-  filter(phase == 'test2') %>% 
-  left_join(b) %>% 
+p_t2_w2 = avgs |> 
+  filter(phase == 'test2') |> 
+  left_join(b) |> 
   ggplot(aes(baseline_log_odds_regular,test_log_odds,colour = lex_typicality)) +
   geom_point(alpha = .5) +
   geom_smooth(method = 'lm') +
