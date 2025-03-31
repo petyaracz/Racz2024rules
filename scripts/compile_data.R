@@ -6,23 +6,20 @@ library(tidyverse)
 library(magrittr)
 library(glue)
 
-# change this to wherever you cloned the 2019 repo:
-path = '~/Github/published/RaczBecknerHayPierrehumbert2019/'
-
 # -- read -- #
 
-# baseline data
-baseline = read_csv(glue('{path}/data/convergence_paper_baseline_data.txt'))
+# baseline data in repo for original paper
+baseline = read_csv('https://raw.githubusercontent.com/petyaracz/RaczBecknerHayPierrehumbert2019/refs/heads/master/data/convergence_paper_baseline_data.txt')
 # rules
 r = read_tsv('dat/rules_fancy.tsv')
 # matcher
-matcher = read_csv(glue('{path}/data/256verbs_print_forms.txt'))
+matcher = read_csv('https://raw.githubusercontent.com/petyaracz/RaczBecknerHayPierrehumbert2019/refs/heads/master/data/256verbs_print_forms.txt')
 # real verbs
-celex = read_tsv(glue('{path}/models/mgl/baseline_mgl/CELEXFull3in.tsv'), col_names = F)
+celex = read_tsv('https://raw.githubusercontent.com/petyaracz/RaczBecknerHayPierrehumbert2019/refs/heads/master/models/mgl/baseline_mgl/CELEXFull3in.tsv'), col_names = F)
 # esp data
-d = read_csv(glue('{path}/data/convergence_paper_esp_data.txt'))
-# test2 data to see who we kept
-t2 = read_csv(glue('{path}/data/convergence_paper_esp_test2_predictions.txt'))
+d = read_csv('https://raw.githubusercontent.com/petyaracz/RaczBecknerHayPierrehumbert2019/refs/heads/master/data//convergence_paper_esp_data.txt')
+# test2 data to see who they kept
+t2 = read_csv('https://raw.githubusercontent.com/petyaracz/RaczBecknerHayPierrehumbert2019/refs/heads/master/data//convergence_paper_esp_test2_predictions.txt')
 
 # -- main -- #
 

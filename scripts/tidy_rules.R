@@ -28,12 +28,9 @@ getFeatures = function(df1){
 
 # -- read -- #
 
-# change this to wherever you cloned the 2019 repo:
-path = '~/Github/published/RaczBecknerHayPierrehumbert2019/'
-
-r = read_tsv(glue('{path}/models/mgl/baseline_mgl/CELEXFull3.sum'))
-celex = read_tsv(glue('{path}/models/mgl/baseline_mgl/CELEXFull3in.tsv'), col_names = F)
-f = read_tsv(glue('{path}/models/mgl/baseline_mgl/CELEXFull3.fea'))
+r = read_tsv('https://raw.githubusercontent.com/petyaracz/RaczBecknerHayPierrehumbert2019/refs/heads/master/models/mgl/baseline_mgl/CELEXFull3.sum')
+celex = read_tsv('https://raw.githubusercontent.com/petyaracz/RaczBecknerHayPierrehumbert2019/refs/heads/master/models/mgl/baseline_mgl/CELEXFull3in.tsv'), col_names = F)
+f = read_tsv('https://raw.githubusercontent.com/petyaracz/RaczBecknerHayPierrehumbert2019/refs/heads/master/models/mgl/baseline_mgl/CELEXFull3.fea')
 
 # -- main -- #
 

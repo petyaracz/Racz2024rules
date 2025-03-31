@@ -1,6 +1,6 @@
 # eda
 
-setwd('~/Github/Racz2024c')
+setwd('~/Github/Racz2024rules')
 
 library(tidyverse)
 library(magrittr)
