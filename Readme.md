@@ -1,7 +1,7 @@
 Tuning minimal generalisations on a morphological learning task
 ================
 Rácz, Péter
-22 March, 2024
+7 April, 2025
 
 A cognitively plausible model of people’s morphophonological intuitions
 in a Wug task is the Minimal Generalisation Learner (MGL). The MGL looks
@@ -14,6 +14,15 @@ Beckner, Hay & Pierrehumbert (2020), who ran a baseline Wug task and a
 morphological learning task (which they call the ESP task), using an
 artificial coplayer. Both tasks focussed on the regular / irregular
 variation of the English past tense.
+
+Table 1 shows an example of how the learner works.
+
+| rule_number | rule_tidy | reliability | scope | hits | confidence | related_forms | exceptions |
+|---:|:---|---:|---:|---:|---:|:---|:---|
+| 1 | \[\] -\> t / \[0 syllabic, 0 voice\] \_ \[\] | 0.95 | 1779 | 1695 | 0.94 | look, want, ask, work, talk, start, help, stop, like, wait, weight, walk, expect, pass, reach, develop, watch, produce, increase, suggest | get, think, take, put, keep, sit, write, right, let, speak, set, eat, meet, break, brake, catch, cut, forget, teach, fight, shake |
+| 2 | I -\> { / \[0 syllabic, 1 COR\] » \_ Nk \[\] | 0.33 | 12 | 4 | 0.33 | drink, sink, shrink, stink | think, link, shrink, blink, stink, clink, rethink, slink |
+
+1. Example rules for “splink”
 
 # The baseline experiment
 
@@ -28,17 +37,17 @@ four regular/irregular categories:
 - burnt (\[3\]/\[E\]/\[I\] → \[3\]/\[E\]/\[I\]Ct)
 
 Nonwords were transcribed into the DISC phonetic alphabet. Examples are
-in Table 1.
+in Table 2.
 
-| burnt             | drove             | kept              | sang             |
-|:------------------|:------------------|:------------------|:-----------------|
-| skell, \[skEl\]   | squide, \[skw2d\] | sneen, \[snin\]   | quink, \[kwINk\] |
-| drurn, \[dr3n\]   | splive, \[spl2v\] | neen, \[nin\]     | dwink, \[dwINk\] |
-| lell, \[lEl\]     | squine, \[skw2n\] | kleem, \[klim\]   | gring, \[grIN\]  |
-| skrurn, \[skr3n\] | thide, \[T2d\]    | squeep, \[skwip\] | zim, \[zIm\]     |
-| zell, \[zEl\]     | squite, \[skw2t\] | sweel, \[swil\]   | dwim, \[dwIm\]   |
+| burnt             | drove             | kept            | sang             |
+|:------------------|:------------------|:----------------|:-----------------|
+| skurn, \[sk3n\]   | schmite, \[Sm2t\] | neem, \[nim\]   | sking, \[skIN\]  |
+| vurn, \[v3n\]     | snine, \[sn2n\]   | sneen, \[snin\] | chim, \[JIm\]    |
+| sprurn, \[spr3n\] | beeve, \[biv\]    | dreep, \[drip\] | schmim, \[SmIm\] |
+| slill, \[slIl\]   | brive, \[br2v\]   | fleel, \[flil\] | quink, \[kwINk\] |
+| brurn, \[br3n\]   | jine, \[\_2n\]    | kleem, \[klim\] | smim, \[smIm\]   |
 
-1. Nonword examples.
+2. Nonword examples.
 
 ## Test data
 
@@ -47,20 +56,20 @@ present tense form of each nonword in a simple carrier sentence in a
 forced-choice task. They could pick the regular or the irregular past
 tense form for each nonword, displayed on buttons. The regular past
 tense form was the -ed form. The irregular form depended on the verb
-class, as seen in Table 2.
+class, as seen in Table 3.
 
-| category | word   | regular_form | irregular_form |
-|:---------|:-------|:-------------|:---------------|
-| burnt    | hurn   | hurned       | hurnt          |
-| burnt    | rurn   | rurned       | rurnt          |
-| drove    | twite  | twited       | twote          |
-| drove    | brive  | brived       | brove          |
-| kept     | neen   | neened       | nent           |
-| kept     | neem   | neemed       | nemt           |
-| sang     | vink   | vinked       | vank           |
-| sang     | spling | splinged     | splang         |
+| category | word    | regular_form | irregular_form |
+|:---------|:--------|:-------------|:---------------|
+| burnt    | twell   | twelled      | twelt          |
+| burnt    | trell   | trelled      | trelt          |
+| drove    | schmite | schmited     | schmote        |
+| drove    | swide   | swided       | swode          |
+| kept     | squeep  | squeeped     | squept         |
+| kept     | preem   | preemed      | premt          |
+| sang     | quing   | quinged      | quang          |
+| sang     | dwim    | dwimmed      | dwam           |
 
-2. Regular and irregular choices in the Wug task.
+3. Regular and irregular choices in the Wug task.
 
 ## Minimal Generalisation Learner (MGL)
 
@@ -81,88 +90,48 @@ one of the past tense forms available in the forced-choice task. A rule
 that generates the `sing -> sung` pattern does not generate an available
 past tense form.
 
-| rule                                                                                                                                        | type      | scope | hits | reliability | confidence |
-|:--------------------------------------------------------------------------------------------------------------------------------------------|:----------|------:|-----:|------------:|-----------:|
-| \[\] -\> d \[3, @, a\]n \_                                                                                                                  | regular   |   135 |  133 |        0.99 |       0.98 |
-| \[\] -\> d \[3, D, S, T, Z, l, r, s, z\] \_                                                                                                 | regular   |  1443 | 1414 |        0.98 |       0.98 |
-| \[\] -\> d \[D, S, T, Z, n, s, z\] \_                                                                                                       | regular   |   902 |  883 |        0.98 |       0.98 |
-| \[\] -\> d \[2, 4, 6, e, i, o, u\]m \_                                                                                                      | regular   |    63 |   62 |        0.98 |       0.97 |
-| \[\] -\> d \[D, S, T, Z, f, s, v, z\] \_                                                                                                    | regular   |   712 |  698 |        0.98 |       0.97 |
-| \[\] -\> d \[b, m\] \_                                                                                                                      | regular   |   169 |  164 |        0.97 |       0.97 |
-| \[\] -\> d \[b, p\] \_                                                                                                                      | regular   |   214 |  207 |        0.97 |       0.96 |
-| \[\] -\> d \[J, S, T, s, t\] \_                                                                                                             | regular   |  1364 | 1314 |        0.96 |       0.96 |
-| \[\] -\> @d \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]»2d \_                                                                    | regular   |    13 |   13 |        1.00 |       0.96 |
-| \[\] -\> @d \[D, T, d, n, s, t, z\]»2t \_                                                                                                   | regular   |    11 |   11 |        1.00 |       0.95 |
-| \[\] -\> d \[3, D, J, S, T, Z, \_, d, l, n, r, s, t, z\] \_                                                                                 | regular   |  3183 | 3046 |        0.96 |       0.94 |
-| \[\] -\> @d t \_                                                                                                                            | regular   |   959 |  913 |        0.95 |       0.94 |
-| \[\] -\> t \[J, S, T, f, k, p, s, t, ~\] \_                                                                                                 | regular   |  1779 | 1695 |        0.95 |       0.94 |
-| \[\] -\> t \[D, J, S, T, Z, \_, d, s, t, z\] \_                                                                                             | regular   |  2020 | 1919 |        0.95 |       0.94 |
-| \[\] -\> d \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\] \_                                                                        | regular   |  2602 | 2458 |        0.94 |       0.94 |
-| \[\] -\> d \[D, J, N, S, T, Z, \_, b, d, f, g, h, k, l, m, n, p, s, t, v, z, ~\] \_                                                         | regular   |  3510 | 3317 |        0.95 |       0.93 |
-| \[\] -\> @d \[2, 3, 4, 6, @, A, E, Q, V, a, e, o, {, »\]d \_                                                                                | regular   |    99 |   89 |        0.90 |       0.89 |
-| 2 -\> o \[3, D, J, S, T, Z, \_, d, l, n, r, s, t, z\]r» \_ \[d, t\]                                                                         | irregular |     4 |    4 |        1.00 |       0.88 |
-| ip -\> Ept \[N, g, j, k, w\]» \_                                                                                                            | irregular |     3 |    3 |        1.00 |       0.85 |
-| ip -\> Ept \[j, l, r, w\]» \_                                                                                                               | irregular |     7 |    6 |        0.86 |       0.79 |
-| 2 -\> o r» \_ \[d, t\]                                                                                                                      | irregular |     9 |    7 |        0.78 |       0.73 |
-| 2 -\> o \[S, Z, r\]» \_ \[d, n, t\]                                                                                                         | irregular |    13 |    9 |        0.69 |       0.66 |
-| 2 -\> o \[2, 3, 4, 6, @, A, D, E, I, N, Q, U, V, Z, \_, a, b, d, e, g, i, j, l, m, n, o, r, u, v, w, z, {, »\]r» \_ \[D, Z, v, z\]          | irregular |     3 |    2 |        0.67 |       0.59 |
-| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ N                                                                                                    | irregular |     3 |    2 |        0.67 |       0.59 |
-| I -\> { \[D, J, S, T, Z, \_, d, s, t, z\]r» \_ Nk                                                                                           | irregular |     3 |    2 |        0.67 |       0.59 |
-| ip -\> Ept \[D, J, N, S, T, Z, \_, b, d, f, g, h, j, k, l, m, n, p, r, s, t, v, w, z, ~\]» \_                                               | irregular |    12 |    7 |        0.58 |       0.56 |
-| \[\] -\> t \[D, N, Z, \_, b, d, g, l, m, n, v, z\]»3n \_                                                                                    | irregular |     4 |    2 |        0.50 |       0.47 |
-| il -\> Elt \[D, N, S, T, Z, f, m, n, s, v, z\]» \_                                                                                          | irregular |     4 |    2 |        0.50 |       0.47 |
-| il -\> Elt \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\]» \_                                                              | irregular |     7 |    3 |        0.43 |       0.41 |
-| I -\> { \[N, g, j, w\]» \_ \[N, m, n\]                                                                                                      | irregular |     5 |    2 |        0.40 |       0.39 |
-| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ v                                                                                                   | irregular |     8 |    3 |        0.38 |       0.37 |
-| I -\> { r» \_ N                                                                                                                             | irregular |     6 |    2 |        0.33 |       0.33 |
-| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]r» \_ N                                                                       | irregular |     9 |    3 |        0.33 |       0.33 |
-| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]                                              | irregular |    12 |    4 |        0.33 |       0.33 |
-| I -\> { \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ Nk                                                                                   | irregular |    12 |    4 |        0.33 |       0.33 |
-| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ N                                                                                                    | irregular |    10 |    3 |        0.30 |       0.30 |
-| \[\] -\> t \[m, w\]»El \_                                                                                                                   | irregular |     7 |    2 |        0.29 |       0.29 |
-| 2 -\> o \[N, j, l, m, n, r, w\]» \_ t                                                                                                       | irregular |    14 |    4 |        0.29 |       0.28 |
-| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ \[D, Z, \_, b, d, g, v, z\]                                                                         | irregular |    34 |    9 |        0.26 |       0.26 |
-| 2 -\> o \[N, j, l, m, n, r, w\]» \_ \[d, t\]                                                                                                | irregular |    22 |    8 |        0.36 |       0.26 |
-| I -\> { \[b, m, v, w\]» \_ \[N, \_, b, d, g, m, n\]                                                                                         | irregular |     8 |    2 |        0.25 |       0.26 |
-| 2 -\> o \[D, J, S, T, Z, \_, d, s, t, z\]» \_ \[D, N, Z, m, n, v, z\]                                                                       | irregular |     9 |    2 |        0.22 |       0.23 |
-| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, N, Z, \_, b, d, g, m, n, v, z\]                                                 | irregular |    18 |    4 |        0.22 |       0.22 |
-| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ \[J, N, \_, b, d, g, k, m, n, p, t, ~\]                                                              | irregular |    15 |    3 |        0.20 |       0.21 |
-| I -\> { \[j, r, w\]» \_ \[N, m, n\]                                                                                                         | irregular |    15 |    3 |        0.20 |       0.21 |
-| I -\> { \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ N                                                                                    | irregular |    35 |    7 |        0.20 |       0.20 |
-| I -\> { \[D, S, T, Z, f, h, j, l, r, s, v, w, z\]» \_ \[N, m, n\]                                                                           | irregular |    22 |    4 |        0.18 |       0.18 |
-| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]» \_ \[N, m, n\]                                                              | irregular |    13 |    2 |        0.15 |       0.16 |
-| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\]                      | irregular |    29 |    5 |        0.17 |       0.16 |
-| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, N, Z, m, n, v, z\]                                                              | irregular |    44 |    7 |        0.16 |       0.14 |
-| i -\> o \[b, f, m, p, v, w\]» \_ \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]                                                     | irregular |    30 |    4 |        0.13 |       0.14 |
-| I -\> { \[j, r, w\]» \_ \[N, m, n\]                                                                                                         | irregular |    45 |    5 |        0.11 |       0.10 |
-| \[\] -\> t \[E, I\]l \_                                                                                                                     | irregular |    46 |    4 |        0.09 |       0.09 |
-| 2 -\> o \[D, N, S, T, Z, f, m, n, s, v, z\]» \_ \[d, n, t\]                                                                                 | irregular |    36 |    3 |        0.08 |       0.09 |
-| i -\> o \[D, J, N, S, T, Z, \_, b, d, f, g, h, j, k, l, m, n, p, r, s, t, v, w, z, ~\]» \_ \[D, Z, l, v, z\]                                | irregular |    50 |    4 |        0.08 |       0.08 |
-| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]» \_ \[N, m, n\]                                                              | irregular |    58 |    4 |        0.07 |       0.07 |
-| I -\> { \[D, N, Z, \_, b, d, g, j, l, m, n, r, v, w, z\]» \_ \[N, m, n\]                                                                    | irregular |    83 |    6 |        0.07 |       0.07 |
-| 2 -\> o \[D, N, S, T, Z, f, h, j, l, m, n, r, s, v, w, z\]» \_ \[d, n, t\]                                                                  | irregular |    66 |   10 |        0.15 |       0.07 |
-| 2 -\> o \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\]» \_ \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\] | irregular |    75 |    4 |        0.05 |       0.06 |
-| \[\] -\> t \[d, n, t\] \_                                                                                                                   | irregular |  1545 | 1144 |        0.74 |       0.02 |
+| rule_tidy | type | scope | hits | reliability | confidence | related_forms | exceptions |
+|:---|:---|---:|---:|---:|---:|:---|:---|
+| \[\] -\> d / \[-syllabic, -aperture, +voice, +LAB\] \_ \[\] | regular | 169 | 164 | 0.97 | 0.97 | seem, seam, describe, form, assume, claim, climb, perform, name, scream, blame, confirm, disturb, rub, absorb, inform, aim, grab, welcome, condemn | come, become, swim, dream, overcome |
+| \[\] -\> t / \[-syllabic, -voice\] \_ \[\] | regular | 1779 | 1695 | 0.95 | 0.94 | look, want, ask, work, talk, start, help, stop, like, wait, weight, walk, expect, pass, reach, develop, watch, produce, increase, suggest | get, think, take, put, keep, sit, write, right, let, speak, set, eat, meet, break, brake, catch, cut, forget, teach, fight, shake |
+| \[\] -\> d / \[-syllabic\] \_ \[\] | regular | 2602 | 2458 | 0.94 | 0.94 | look, want, ask, use, need, knead, work, live, talk, change, start, move, believe, help, stop, like, wait, weight, walk, expect, pass | get, think, take, give, find, put, leave, keep, sit, stand, hold, write, right, let, read, speak, lose, set, lead, understand |
+| \[\] -\> d / \[-syllabic\] \_ \[\] | regular | 3510 | 3317 | 0.95 | 0.93 | look, want, seem, seam, ask, use, call, turn, need, knead, work, live, talk, change, start, happen, move, believe, help, stop, like | get, think, come, take, give, find, tell, feel, become, put, leave, mean, begin, keep, bring, sit, stand, hold, write, right |
+| I -\> { / \[-syllabic, +COR\] » \_ N \[\] | irregular | 3 | 2 | 0.67 | 0.59 | ring, wring, sing | ring, wring |
+| I -\> { / \[-syllabic, +COR\] r» \_ Nk \[\] | irregular | 3 | 2 | 0.67 | 0.59 | drink, shrink | shrink |
+| I -\> { / \[-syllabic, +voice, +DORSAL\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 5 | 2 | 0.40 | 0.39 | begin, swim | win, swing, wing |
+| I -\> { / \[\] r» \_ N \[\] | irregular | 6 | 2 | 0.33 | 0.33 | ring, wring, spring | bring, spring, ring, wring, string |
+| I -\> { / \[-syllabic\] r» \_ N \[\] | irregular | 9 | 3 | 0.33 | 0.33 | drink, spring, shrink | bring, spring, shrink, sprinkle, string, crinkle |
+| I -\> { / \[-syllabic, +COR\] » \_ Nk \[\] | irregular | 12 | 4 | 0.33 | 0.33 | drink, sink, shrink, stink | think, link, shrink, blink, stink, clink, rethink, slink |
+| I -\> { / \[-syllabic, +COR\] » \_ N \[\] | irregular | 10 | 3 | 0.30 | 0.30 | ring, wring, sing, spring | bring, spring, cling, fling, ring, wring, sling, string |
+| I -\> { / \[-syllabic, +voice, +LAB\] » \_ \[-syllabic, -aperture, +voice\] | irregular | 8 | 2 | 0.25 | 0.26 | swim, forbid | win, swing, forbid, bid, wing, swig |
+| I -\> { / \[-syllabic, +COR\] » \_ \[-syllabic, -aperture\] | irregular | 15 | 3 | 0.20 | 0.21 | sit, ring, wring, sing | sip, rip, lick, thin, ring, wring, ship, rig, sin, zip, shit, rim, ridge |
+| I -\> { / \[-syllabic, 4 sonority, 2 aperture, +voice\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 15 | 3 | 0.20 | 0.21 | ring, wring, swim, spring | bring, win, swing, spring, grin, trim, ring, wring, string, brim, wing, rim, chagrin |
+| I -\> { / \[-syllabic, +COR\] » \_ N \[\] | irregular | 35 | 7 | 0.20 | 0.20 | drink, ring, wring, sing, sink, spring, shrink, stink | think, bring, link, spring, distinguish, cling, fling, shrink, blink, linger, sprinkle, wrinkle, sting, ring, wring, sling, string, relinquish, stink, extinguish |
+| I -\> { / \[-syllabic\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 22 | 4 | 0.18 | 0.18 | ring, wring, sing, swim, spring | bring, win, swing, spring, cling, grin, fling, trim, thin, ring, wring, sling, string, sin, brim, wing, rim, slim, chagrin |
+| I -\> { / \[-syllabic\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 13 | 2 | 0.15 | 0.16 | begin, sing | spin, pin, sting, skim, thin, tin, sin, skin, dim, underpin, ping |
+| I -\> { / \[-syllabic, 4 sonority, 2 aperture, +voice\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 45 | 5 | 0.11 | 0.10 | drink, ring, wring, swim, spring, shrink | bring, win, swing, print, spring, grin, shrink, sprinkle, wrinkle, dwindle, trim, rinse, wink, squint, ring, wring, discriminate, wince, string, whimper |
+| I -\> { / \[-syllabic\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 58 | 4 | 0.07 | 0.07 | begin, sing, sink, stink | think, continue, finish, distinguish, convince, spin, stimulate, pin, pinch, simmer, sting, symbolize, disintegrate, skim, simplify, thin, shimmer, assimilate, sympathize |
+| I -\> { / \[-syllabic, +voice\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 83 | 6 | 0.07 | 0.07 | begin, drink, ring, wring, swim, spring, shrink | bring, win, swing, link, limit, print, spring, convince, eliminate, cling, grin, diminish, fling, shrink, blink, linger, administer, sprinkle, wrinkle |
 
-3. Rules from Celex.
+4. Rules from Celex.
 
 Rules take the structural description of input -\> output / context.
 Multiple rules can apply to the same input form. For the majority of
 forms, there is one regular and one irregular rule available. For some,
 there is no irregular rule. For some, there are more regular rules.
-Examples can be seen in Table 4.
+Let’s look at rules for the “sang” group only. Rules can be seen in
+Table 4. Examples can be seen in Table 5.
 
-| category | word   | regular | irregular |
-|:---------|:-------|--------:|----------:|
-| burnt    | surn   |       1 |         1 |
-| drove    | splive |       1 |         1 |
-| drove    | squite |       2 |         1 |
-| drove    | thride |       3 |         1 |
-| kept     | kleel  |       1 |         1 |
-| sang     | schmim |       1 |         1 |
-| sang     | snink  |       2 |         1 |
+| word | category | type | rule_tidy | confidence | weight |
+|:---|:---|:---|:---|---:|---:|
+| shing | sang | regular | \[\] -\> d / \[0 syllabic\] \_ \[\] | 0.93 | 0.61 |
+| shing | sang | irregular | I -\> { / \[0 syllabic, 1 COR\] » \_ N \[\] | 0.59 | 0.61 |
+| pring | sang | regular | \[\] -\> d / \[0 syllabic\] \_ \[\] | 0.93 | 0.74 |
+| pring | sang | irregular | I -\> { / \[\] r» \_ N \[\] | 0.33 | 0.74 |
+| grink | sang | regular | \[\] -\> t / \[0 syllabic, 0 voice\] \_ \[\] | 0.94 | 0.74 |
+| grink | sang | irregular | I -\> { / \[0 syllabic\] r» \_ N \[\] | 0.33 | 0.74 |
 
-Table 4. Possible number of regular / irregular rules for some forms.
+Table 5. Best regular / irregular rules for some sang forms.
 
 Following both Rácz, Beckner, Hay & Pierrehumbert (2020) and Albright &
 Hayes (2003) we can pick the best regular and the best irregular rule
@@ -337,78 +306,48 @@ rules that apply to these verbs will overlap. This will be especially
 true for rules that have broad structural descriptions and thus apply to
 many forms. These tend to be regular rules.
 
-| rule                                                                                                         | type      | scope | phase         |
-|:-------------------------------------------------------------------------------------------------------------|:----------|------:|:--------------|
-| \[\] -\> d \[D, J, N, S, T, Z, \_, b, d, f, g, h, k, l, m, n, p, s, t, v, z, ~\] \_                          | regular   |  3510 | esp, posttest |
-| \[\] -\> d \[3, D, J, S, T, Z, \_, d, l, n, r, s, t, z\] \_                                                  | regular   |  3183 | esp, posttest |
-| \[\] -\> t \[J, S, T, f, k, p, s, t, ~\] \_                                                                  | regular   |  1779 | esp, posttest |
-| \[\] -\> t \[d, n, t\] \_                                                                                    | irregular |  1545 | esp, posttest |
-| \[\] -\> d \[3, D, S, T, Z, l, r, s, z\] \_                                                                  | regular   |  1443 | esp, posttest |
-| \[\] -\> d \[J, S, T, s, t\] \_                                                                              | regular   |  1364 | esp, posttest |
-| \[\] -\> d \[D, S, T, Z, n, s, z\] \_                                                                        | regular   |   902 | esp, posttest |
-| \[\] -\> d \[D, S, T, Z, f, s, v, z\] \_                                                                     | regular   |   712 | esp, posttest |
-| \[\] -\> d \[b, p\] \_                                                                                       | regular   |   214 | esp, posttest |
-| \[\] -\> d \[b, m\] \_                                                                                       | regular   |   169 | esp, posttest |
-| \[\] -\> d \[3, @, a\]n \_                                                                                   | regular   |   135 | esp, posttest |
-| \[\] -\> d \[2, 4, 6, e, i, o, u\]m \_                                                                       | regular   |    63 | esp, posttest |
-| \[\] -\> t \[E, I\]l \_                                                                                      | irregular |    46 | esp, posttest |
-| I -\> { \[j, r, w\]» \_ \[N, m, n\]                                                                          | irregular |    45 | esp, posttest |
-| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, N, Z, m, n, v, z\]                               | irregular |    44 | esp, posttest |
-| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ \[D, Z, \_, b, d, g, v, z\]                                          | irregular |    34 | esp, posttest |
-| 2 -\> o \[N, j, l, m, n, r, w\]» \_ \[d, t\]                                                                 | irregular |    22 | esp, posttest |
-| 2 -\> o \[N, j, l, m, n, r, w\]» \_ t                                                                        | irregular |    14 | esp, posttest |
-| 2 -\> o \[S, Z, r\]» \_ \[d, n, t\]                                                                          | irregular |    13 | esp, posttest |
-| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ N                                                                     | irregular |    10 | esp, posttest |
-| 2 -\> o r» \_ \[d, t\]                                                                                       | irregular |     9 | esp, posttest |
-| I -\> { \[b, m, v, w\]» \_ \[N, \_, b, d, g, m, n\]                                                          | irregular |     8 | esp, posttest |
-| I -\> { \[N, g, j, w\]» \_ \[N, m, n\]                                                                       | irregular |     5 | esp, posttest |
-| 2 -\> o \[3, D, J, S, T, Z, \_, d, l, n, r, s, t, z\]r» \_ \[d, t\]                                          | irregular |     4 | esp, posttest |
-| i -\> o \[D, J, N, S, T, Z, \_, b, d, f, g, h, j, k, l, m, n, p, r, s, t, v, w, z, ~\]» \_ \[D, Z, l, v, z\] | irregular |    50 | esp           |
-| I -\> { \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ N                                                     | irregular |    35 | esp           |
-| I -\> { \[D, S, T, Z, l, r, s, z\]» \_ \[J, N, \_, b, d, g, k, m, n, p, t, ~\]                               | irregular |    15 | esp           |
-| I -\> { \[j, r, w\]» \_ \[N, m, n\]                                                                          | irregular |    15 | esp           |
-| I -\> { \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ Nk                                                    | irregular |    12 | esp           |
-| ip -\> Ept \[D, J, N, S, T, Z, \_, b, d, f, g, h, j, k, l, m, n, p, r, s, t, v, w, z, ~\]» \_                | irregular |    12 | esp           |
-| 2 -\> o \[D, J, S, T, Z, \_, d, s, t, z\]» \_ \[D, N, Z, m, n, v, z\]                                        | irregular |     9 | esp           |
-| 2 -\> o \[D, Z, \_, d, l, n, r, z\]» \_ v                                                                    | irregular |     8 | esp           |
-| \[\] -\> t \[m, w\]»El \_                                                                                    | irregular |     7 | esp           |
-| il -\> Elt \[D, J, N, S, T, Z, \_, b, d, f, g, k, m, n, p, s, t, v, z, ~\]» \_                               | irregular |     7 | esp           |
-| I -\> { r» \_ N                                                                                              | irregular |     6 | esp           |
-| I -\> { \[D, N, Z, \_, b, d, g, j, l, m, n, r, v, w, z\]» \_ \[N, m, n\]                                     | irregular |    83 | posttest      |
-| 2 -\> o \[D, N, S, T, Z, f, h, j, l, m, n, r, s, v, w, z\]» \_ \[d, n, t\]                                   | irregular |    66 | posttest      |
-| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]» \_ \[N, m, n\]                               | irregular |    58 | posttest      |
-| 2 -\> o \[D, N, S, T, Z, f, m, n, s, v, z\]» \_ \[d, n, t\]                                                  | irregular |    36 | posttest      |
-| i -\> o \[b, f, m, p, v, w\]» \_ \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]                      | irregular |    30 | posttest      |
-| I -\> { \[D, S, T, Z, f, h, j, l, r, s, v, w, z\]» \_ \[N, m, n\]                                            | irregular |    22 | posttest      |
-| 2 -\> o \[D, J, S, T, Z, \_, d, l, n, r, s, t, z\]» \_ \[D, N, Z, \_, b, d, g, m, n, v, z\]                  | irregular |    18 | posttest      |
-| \[\] -\> @d \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]»2d \_                                     | regular   |    13 | posttest      |
-| I -\> { \[D, J, S, T, Z, \_, b, d, f, g, k, p, s, t, v, z, ~\]r» \_ N                                        | irregular |     9 | posttest      |
-| ip -\> Ept \[j, l, r, w\]» \_                                                                                | irregular |     7 | posttest      |
-| \[\] -\> t \[D, N, Z, \_, b, d, g, l, m, n, v, z\]»3n \_                                                     | irregular |     4 | posttest      |
-| ip -\> Ept \[N, g, j, k, w\]» \_                                                                             | irregular |     3 | posttest      |
+| rule_tidy | type | scope | phase |
+|:---|:---|---:|:---|
+| \[\] -\> d / \[-syllabic\] \_ \[\] | regular | 3510 | esp, posttest |
+| \[\] -\> t / \[-syllabic, -voice\] \_ \[\] | regular | 1779 | esp, posttest |
+| \[\] -\> d / \[-syllabic, -aperture, +voice, +LAB\] \_ \[\] | regular | 169 | esp, posttest |
+| I -\> { / \[-syllabic, 4 sonority, 2 aperture, +voice\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 45 | esp, posttest |
+| I -\> { / \[-syllabic, +COR\] » \_ N \[\] | irregular | 10 | esp, posttest |
+| I -\> { / \[-syllabic, +voice, +LAB\] » \_ \[-syllabic, -aperture, +voice\] | irregular | 8 | esp, posttest |
+| I -\> { / \[-syllabic, +voice, +DORSAL\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 5 | esp, posttest |
+| I -\> { / \[-syllabic, +COR\] » \_ N \[\] | irregular | 35 | esp |
+| I -\> { / \[-syllabic, +COR\] » \_ \[-syllabic, -aperture\] | irregular | 15 | esp |
+| I -\> { / \[-syllabic, 4 sonority, 2 aperture, +voice\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 15 | esp |
+| I -\> { / \[-syllabic, +COR\] » \_ Nk \[\] | irregular | 12 | esp |
+| I -\> { / \[\] r» \_ N \[\] | irregular | 6 | esp |
+| I -\> { / \[-syllabic, +voice\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 83 | posttest |
+| I -\> { / \[-syllabic\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 58 | posttest |
+| I -\> { / \[-syllabic\] » \_ \[-syllabic, 2 sonority, -aperture, +nasal, +voice\] | irregular | 22 | posttest |
+| I -\> { / \[-syllabic\] r» \_ N \[\] | irregular | 9 | posttest |
 
-Table 5. Rule overlaps for one participant
+Table 6. Rule overlaps for one participant (sang verbs)
 
-To illustrate this point, we show one participant in Table 5. Taken
-together, 47 relevant rules apply to the 104 verbs that our participant
-sees in the ESP task and the posttest. 24 rules overlap: they apply to
-some verbs in both tasks. 11 rules only apply to verbs in the ESP task.
-Following the MGL logic, whatever the participant learned about these
-verbs won’t carry over to the posttest. 12 rules only apply to verbs in
-the posttest. The participant didn’t learn anything new about these
-verbs. Unsurprisingly, the rules that overlap have much larger scopes (a
-mean of 636) than those which do not (a mean of 23). 11 overlapping
-rules are regular, only 1 non-overlapping rule is regular.
+To illustrate this point, we show one participant and one category,
+‘sang’, in Table 6. Taken together, 16 relevant rules apply to the 104
+verbs that our participant sees in the ESP task and the posttest. 7
+rules overlap: they apply to some verbs in both tasks. 5 rules only
+apply to verbs in the ESP task. Following the MGL logic, whatever the
+participant learned about these verbs won’t carry over to the posttest.
+4 rules only apply to verbs in the posttest. The participant didn’t
+learn anything new about these verbs. Unsurprisingly, the rules that
+overlap have much larger scopes (a mean of 789) than those which do not
+(a mean of 28). 3 overlapping rules are regular, only 0 non-overlapping
+rule is regular.
 
 This suggests that whatever the participant learns about the regular
 rules will be far more influential in the posttest than what they learn
 about irregular rules.
 
-One way to express this learning is to adjust rule confidence for rules
-in the ESP task. We will do this in the following way: For each
-participant and rule in the ESP task, we tally the number of regular and
-irregular responses by the participant in the ESP task. We do this for
-the reversed condition only.
+One way to express learning is to adjust rule confidence for rules in
+the ESP task. We will do this in the following way: For each participant
+and rule in the ESP task, we tally the number of regular and irregular
+responses by the participant in the ESP task. We do this for the
+reversed condition only.
 
 If the rule is regular, it works very well if every verb it applies gets
 a regular response. For every regular response, the rule is rewarded.
@@ -423,31 +362,92 @@ regular rule but keeps picking irregular forms for verbs in the rule’s
 scope, the rule’s confidence is steadily demoted. If the rule works well
 across the task, its confidence will increase. The rate of this increase
 / decrease is controlled by the parameter `learning rate`, which ranges
-between 0.05 and 1.5, with a .05 step, resulting in 90 fits of the
-learner. We fit the rule updater in three configurations: (i) updating
-both regular and irregular rules, (ii) updating regular rules only,
-(iii) updating irregular rules only.
+between 0.5 and 25, with a .5 step. We fit the rule updater with two
+extra hyperparameters. These are (a) rule type ((i) updating both
+regular and irregular rules, (ii) updating regular rules only, (iii)
+updating irregular rules only) and (b) response type ((i) updating based
+on co-player responses or (ii) the participant’s own responses in the
+ESP test phase).
 
 ![](figures/rulemove1-1.png)<!-- -->
 
 Figure 5 shows how the updated rules fare in the reversed condition
-posttest. The y axis shows mean participant regularisation, the x axis
-shows MGL regular weight for words in the posttest. We only show loess
-smooths of posttest regularisation and MGL weight. The grey trajectory
-is the accuracy of the original MGL’s regular weights. Each coloured
-smooth shows weights from one updated MGL. Colour shows the learning
-rate: darker colours mean that each ESP response updated the relevant
-rules to a small extent, lighter colours, to a large extent. The three
-panels show how the updated models change in accuracy if we update both
-rules (left), the regular rule only (middle), and the irregular rule
-only (right).
+posttest. The x axis shows model learning rate, the y axis shows model
+accuracy, as expressed by the concordance index ‘C’ of the individual
+participant responses and the model prediction. The colours show which
+rules were updated in a given model. The two panels show models trained
+on player or co-player responses. The best model is trained on the
+participant’s own responses, tunes regular rules only, and has a
+comparatively high learning rate. This can be seen in Table 7.
 
-We used a simple Spearman correlation between mean word regular response
-and updated MGL weight to find the best model. The Spearman correlation
-between mean regular response and the original MGL model weights is
-0.43. The best updated model only updates the regular rules and has a
-learning weight of 1.15. Its correlation coefficient is 0.59, which is a
-clear improvement on the original MGL.
+| learning_rate | which_rules | which_responses |    c |
+|--------------:|:------------|:----------------|-----:|
+|          24.5 | regular     | own             | 0.64 |
+|           0.5 | both        | own             | 0.62 |
+|           2.0 | regular     | coplayer        | 0.62 |
+|           0.5 | irregular   | own             | 0.58 |
+|           0.5 | both        | coplayer        | 0.55 |
+|           0.5 | irregular   | coplayer        | 0.52 |
+
+Table 7. Best outcomes for the updating model
+
+How does this compare with the original models?
+
+We fit a hierarchical logistic regression model predicting participant
+responses across the reversed condition, using baseline and individual
+model weights as a predictor and a participant grouping factor. We
+compare the GCM, the baseline + individual MGL, and the baseline +
+updating MGL. We fit separate models because of collinearity issues.
+
+    ## # A tibble: 4 × 9
+    ##   effect   group term  estimate std.error statistic   p.value conf.low conf.high
+    ##   <chr>    <chr> <chr>    <dbl>     <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
+    ## 1 fixed    <NA>  (Int…   -53.5       5.27    -10.2   3.28e-24    -63.8    -43.2 
+    ## 2 fixed    <NA>  base…    73.2       6.25     11.7   9.18e-32     61.0     85.5 
+    ## 3 fixed    <NA>  indi…   -19.3       4.79     -4.04  5.30e- 5    -28.7     -9.96
+    ## 4 ran_pars part… sd__…     2.03     NA        NA    NA            NA       NA
+
+    ## # Check for Multicollinearity
+    ## 
+    ## Low Correlation
+    ## 
+    ##                     Term  VIF   VIF 95% CI Increased SE Tolerance
+    ##    baseline_gcm_features 1.42 [1.37, 1.49]         1.19      0.70
+    ##  individual_gcm_features 1.42 [1.37, 1.49]         1.19      0.70
+    ##  Tolerance 95% CI
+    ##      [0.67, 0.73]
+    ##      [0.67, 0.73]
+
+    ## # A tibble: 4 × 9
+    ##   effect   group term  estimate std.error statistic   p.value conf.low conf.high
+    ##   <chr>    <chr> <chr>    <dbl>     <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
+    ## 1 fixed    <NA>  (Int…   -2.96      0.349    -8.49   2.12e-17   -3.65     -2.28 
+    ## 2 fixed    <NA>  base…    3.47      0.299    11.6    3.62e-31    2.88      4.05 
+    ## 3 fixed    <NA>  indi…   -0.184     0.318    -0.577  5.64e- 1   -0.807     0.440
+    ## 4 ran_pars part… sd__…    1.78     NA        NA     NA          NA        NA
+
+    ## # Check for Multicollinearity
+    ## 
+    ## Low Correlation
+    ## 
+    ##                     Term  VIF   VIF 95% CI Increased SE Tolerance
+    ##    baseline_mgl_features 1.19 [1.15, 1.23]         1.09      0.84
+    ##  individual_mgl_features 1.19 [1.15, 1.23]         1.09      0.84
+    ##  Tolerance 95% CI
+    ##      [0.81, 0.87]
+    ##      [0.81, 0.87]
+
+    ## # A tibble: 4 × 9
+    ##   effect   group term  estimate std.error statistic   p.value conf.low conf.high
+    ##   <chr>    <chr> <chr>    <dbl>     <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
+    ## 1 fixed    <NA>  (Int…    -4.27     0.525     -8.13  4.33e-16   -5.30      -3.24
+    ## 2 fixed    <NA>  base…     3.03     0.298     10.2   3.07e-24    2.45       3.62
+    ## 3 fixed    <NA>  base…     1.60     0.533      3.00  2.69e- 3    0.555      2.65
+    ## 4 ran_pars part… sd__…     1.74    NA         NA    NA          NA         NA
+
+In this set, the baseline + updating MGL is the best fit. There is more
+mileage in tuning the GCM and the original MGL as well, but finding an
+MGL setup that improves on the baseline is an important result.
 
 ## Discussion
 

@@ -68,36 +68,34 @@ updateConfidence = function(learning_rate,which_rules,which_responses){
   final_weights = final_confidences |>
     pivot_wider(names_from = type, values_from = final_confidence, values_fill = 0) |> 
     mutate(updated_weight = case_when(
-      irregular == 0 ~ 1,
-      irregular != 0 ~ regular / (regular + irregular)
-    )
+        irregular == 0 ~ 1,
+        irregular != 0 ~ regular / (regular + irregular)
+      )
     ) |> 
     select(-regular,-irregular)
   
-  # we grab the posttest again and add weights
+  # we grab the posttest again and add weights. since d has double rows, we need to distinct for the relevant cols.
   reversed_posttest = d |>
     filter(
       phase == 'posttest',
       reg_dist == 'reversed'
     ) |> 
-    select(participant_id,word,weight,resp_reg) |> 
+    distinct(participant_id,word,weight,resp_reg) |>  # !!! and how
     left_join(final_weights, by = join_by(participant_id, word))
   
-  # we calculate a summary for words in the entire reversed posttest
-  reversed_summary = reversed_posttest |> 
-    group_by(word,weight) |> 
-    summarise(
-      updated_weight = mean(updated_weight),
-      mean_reg = mean(resp_reg)
+  # we calc somers c
+  reversed_posttest = reversed_posttest |> 
+    mutate(
+      c = Hmisc::somers2(updated_weight, resp_reg)[1]
     )
   
-  # we return this summary
-  return(reversed_summary)
+  return(reversed_posttest)
 }
 
 # -- read -- #
 
-d = read_tsv('dat/exp_data_with_rules.gz')
+d = read_tsv('dat/exp_data_with_rules.gz') # data w/ rules
+test2 = read_tsv('dat/posttest_data_original.gz') # original posttest
 
 # -- wrangle -- #
 
@@ -116,41 +114,47 @@ d %<>%
 
 # parameters: learning rate, which rules to use
 parameters = crossing(
-  learning_rate = seq(.05,1.5,.05),
+  learning_rate = seq(.5,25,.5),
   which_rules = c('both','regular','irregular'),
   which_responses = c('coplayer','own')
 )
 
 # iterate the learner through the parameter settings
+# calc somers C
 outcomes = parameters |>
   rowwise() |> 
   mutate(
-    summary = list(updateConfidence(learning_rate, which_rules, which_responses))
+    out = list(updateConfidence(learning_rate, which_rules, which_responses))
   )
 
-# unnest it
-outcomes_unnested = outcomes |> 
-  unnest(summary)
+outcomes_curve = outcomes |> 
+  unnest(out) |> 
+  distinct(which_rules, which_responses, learning_rate, c)
 
-# get ten best outcomes (maybe one day I'll use this)
-best_outcomes = outcomes_unnested |> 
-  group_by(learning_rate,which_rules,which_responses) |> 
-  summarise(
-    cor_weight = cor(mean_reg,updated_weight)
-  ) |> 
-  arrange(-cor_weight) |> 
-  ungroup() |>
-  slice(1:10)
+best_outcomes = outcomes |> 
+  unnest(out) |> 
+  group_by(which_rules, which_responses) |> 
+  filter(c == max(c)) |> 
+  ungroup()
 
-# get bestest outcome
-best_outcome = best_outcomes |> 
-  slice(1)
+# -- combine with test2 data -- #
 
-# get bestest values
-best_outcome = outcomes_unnested |> 
-  inner_join(best_outcome)
+best_settings = best_outcomes |> 
+  filter(c == max(c)) |> 
+  distinct(learning_rate,which_rules,which_responses)
+
+best_preds = outcomes |> 
+  inner_join(best_settings) |> 
+  unnest(out) |> 
+  rename(baseline_mgl_features_updating = updated_weight) |>  # !!!
+  select(participant_id,word,baseline_mgl_features_updating)
+
+test2_2 = test2 |> 
+  filter(lex_typicality == 'atypical') |> 
+  left_join(best_preds)
 
 # -- write -- #
 
-write_tsv(outcomes_unnested, 'dat/modelling_outcomes.tsv')
-write_tsv(best_outcome, 'dat/modelling_best_outcome.tsv')
+write_tsv(best_outcomes, 'dat/modelling_best_outcomes.tsv')
+write_tsv(outcomes_curve, 'dat/modelling_curve.tsv')
+write_tsv(test2_2, 'dat/posttest_data_original_with_best_rules.gz')

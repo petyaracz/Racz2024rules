@@ -36,11 +36,12 @@ gs4_auth(email = 'petermartonracz@gmail.com')
 
 # esp data with baseline word log odds and rules, made by scripts/compile_data.R
 d = read_tsv('dat/exp_data_with_rules.gz')
-# modelling outcomes, all of them, made by scripts/learner.R
-outcomes = read_tsv('dat/modelling_outcomes.tsv')
+# modelling outcomes, with best parameter settings of learning rate, made by scripts/learner.R
+outcomes = read_tsv('dat/modelling_best_outcomes.tsv')
 # best modelling outcome according to correlation of word weight and word mean resp, made by scripts/learner.R
-best_outcome = read_tsv('dat/modelling_best_outcome.tsv')
-
+# accuracy curves across learning rate
+curves = read_tsv('dat/modelling_curve.tsv')
+test2_2 = read_tsv('dat/posttest_data_original_with_best_rules.gz') # test2 with updating mgl preds
 # -- wrangle -- #
 
 # sort out factor levels
@@ -444,32 +445,69 @@ One way to express learning is to adjust rule confidence for rules in the ESP ta
 
 If the rule is regular, it works very well if every verb it applies gets a regular response. For every regular response, the rule is rewarded. For every irregular response, the rule incurs a penalty. If the rule is irregular, all the verbs in its scope should be irregular. For every irregular response, the rule is rewarded. For every regular response, the rule incurs a penalty.
 
-These total rewards and penalties are used to update the rule's confidence. If the participant starts the ESP task with a very strong regular rule but keeps picking irregular forms for verbs in the rule's scope, the rule's confidence is steadily demoted. If the rule works well across the task, its confidence will increase. The rate of this increase / decrease is controlled by the parameter `learning rate`, which ranges between 0.05 and 1.5, with a .05 step, resulting in 90 fits of the learner. We fit the rule updater in three configurations: (i) updating both regular and irregular rules, (ii) updating regular rules only, (iii) updating irregular rules only.
+These total rewards and penalties are used to update the rule's confidence. If the participant starts the ESP task with a very strong regular rule but keeps picking irregular forms for verbs in the rule's scope, the rule's confidence is steadily demoted. If the rule works well across the task, its confidence will increase. The rate of this increase / decrease is controlled by the parameter `learning rate`, which ranges between 0.5 and 25, with a .5 step. We fit the rule updater with two extra hyperparameters. These are (a) rule type ((i) updating both regular and irregular rules, (ii) updating regular rules only, (iii) updating irregular rules only) and (b) response type ((i) updating based on co-player responses or (ii) the participant's own responses in the ESP test phase).
 
 ```{r rulemove1, fig.width = 9, fig.height = 4}
-outcomes |> 
-  mutate(
-    which_responses = glue('{which_responses} responses'),
-    which_rules = glue('{which_rules} rules'),
-    which_responses = factor(which_responses, levels = c('own responses','coplayer responses')),
-    which_rules = factor(which_rules, levels = c('regular rules','irregular rules','both rules'))
-  ) |> 
-  ggplot() +
-  geom_smooth(aes(weight,mean_reg), method = 'loess', colour = 'lightgreen') +
-  geom_smooth(aes(updated_weight,mean_reg,colour = as.factor(learning_rate)), method = 'loess', se = F) +
-  scale_colour_viridis_d(option = 'inferno') +
+curves |> 
+  mutate(which_responses2 = glue('{which_responses} responses')) |> 
+  ggplot(aes(learning_rate,c, colour = which_rules)) +
+  geom_line() +
+  facet_wrap(~ which_responses2) +
+  scale_colour_colorblind() +
   theme_bw() +
-  xlab('MGL weight (grey: original, colour: updated)') +
-  ylab('Mean regularisation in reversed posttest') +
-  # ggtitle('Tuning rules\non the ESP task') +
-  facet_wrap( ~ which_responses + which_rules, ncol = 3) +
-  coord_cartesian(ylim = c(.25,.65), xlim = c(.15,1)) +
-  guides(colour = 'none') + plot_annotation(title = 'Figure 5. Updated rule confidence and predictive accuracy in the posttest.')
+  labs(colour = 'rules updated') +
+  xlab('learning rate') +
+  ylab("Somers C\n(Dxy rank correlation receiver\noperating characteristic curve area)")
 ```
 
-Figure 5 shows how the updated rules fare in the reversed condition posttest. The y axis shows mean participant regularisation, the x axis shows MGL regular weight for words in the posttest. We only show loess smooths of posttest regularisation and MGL weight. The grey trajectory is the accuracy of the original MGL's regular weights. Each coloured smooth shows weights from one updated MGL. Colour shows the learning rate: darker colours mean that each ESP response updated the relevant rules to a small extent, lighter colours, to a large extent. The three panels show how the updated models change in accuracy if we update both rules (left), the regular rule only (middle), and the irregular rule only (right). 
+Figure 5 shows how the updated rules fare in the reversed condition posttest. The x axis shows model learning rate, the y axis shows model accuracy, as expressed by the concordance index 'C' of the individual participant responses and the model prediction. The colours show which rules were updated in a given model. The two panels show models trained on player or co-player responses. The best model is trained on the participant's own responses, tunes regular rules only, and has a comparatively high learning rate. This can be seen in Table 7.
 
-We used a simple Spearman correlation between mean word regular response and updated MGL weight to find the best model. The Spearman correlation between mean regular response and the original MGL model weights is `r round(base_cor,2)`. The best updated model only updates the regular rules and has a learning weight of `r unique(best_outcome$learning_rate)`. Its correlation coefficient is `r round(unique(best_outcome$cor_weight),2)`, which is a clear improvement on the original MGL.
+```{r best_outcomes}
+best_outcomes = outcomes |> 
+  distinct(learning_rate,which_rules,which_responses,c) |> 
+  arrange(-c)
+
+best_outcomes |> 
+  write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table8')
+best_outcomes |> 
+  kable(digits = 2, caption = 'Table 7. Best outcomes for the updating model')
+
+best_settings = best_outcomes |> 
+  select(-c) |> 
+  slice(1)
+```
+
+How does this compare with the original models?
+
+We fit a hierarchical logistic regression model predicting participant responses across the reversed condition, using baseline and individual model weights as a predictor and a participant grouping factor. We compare the GCM, the baseline + individual MGL, and the baseline + updating MGL. We fit separate models because of collinearity issues.
+
+```{r comparison_reversed}
+
+# sanity check
+# with(test2_2, Hmisc::somers2(baseline_gcm_features,resp_post_reg))
+# with(test2_2, Hmisc::somers2(baseline_mgl_features,resp_post_reg))
+# with(test2_2, Hmisc::somers2(individual_gcm_features,resp_post_reg))
+# with(test2_2, Hmisc::somers2(individual_mgl_features,resp_post_reg))
+# with(test2_2, Hmisc::somers2(baseline_mgl_features_updating,resp_post_reg))
+# I'm sane
+
+fit_gcm = glmer(resp_post_reg ~ baseline_gcm_features + individual_gcm_features + (1|participant_id), data = test2_2, family = binomial)
+tidy(fit_gcm, conf.int = T)
+check_collinearity(fit_gcm)
+fit_mgl_1 = glmer(resp_post_reg ~ baseline_mgl_features + individual_mgl_features + (1|participant_id), data = test2_2, family = binomial)
+tidy(fit_mgl_1, conf.int = T)
+check_collinearity(fit_mgl_1)
+fit_mgl_2 = glmer(resp_post_reg ~ baseline_mgl_features + baseline_mgl_features_updating + (1|participant_id), data = test2_2, family = binomial)
+tidy(fit_mgl_2, conf.int = T)
+
+compo_table = compare_performance(fit_gcm,fit_mgl_1,fit_mgl_2, metrics = 'common')
+
+compo_table |> 
+   write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table9')
+
+```
+
+In this set, the baseline + updating MGL is the best fit. There is more mileage in tuning the GCM and the original MGL as well, but finding an MGL setup that improves on the baseline is an important result.
 
 ## Discussion
 
