@@ -39,13 +39,13 @@ four regular/irregular categories:
 Nonwords were transcribed into the DISC phonetic alphabet. Examples are
 in Table 2.
 
-| burnt           | drove           | kept             | sang               |
-|:----------------|:----------------|:-----------------|:-------------------|
-| snurn, \[sn3n\] | snine, \[sn2n\] | kleem, \[klim\]  | grink, \[grINk\]   |
-| trell, \[trEl\] | slive, \[sl2v\] | shreep, \[Srip\] | smink, \[smINk\]   |
-| prurn, \[pr3n\] | quide, \[kw2d\] | pleel, \[plil\]  | thring, \[TrIN\]   |
-| drell, \[drEl\] | klide, \[kl2d\] | geem, \[gim\]    | glink, \[glINk\]   |
-| thurn, \[T3n\]  | vrite, \[vr2t\] | dreep, \[drip\]  | skrink, \[skrINk\] |
+| burnt           | drove             | kept              | sang              |
+|:----------------|:------------------|:------------------|:------------------|
+| rurn, \[r3n\]   | chite, \[J2t\]    | sneem, \[snim\]   | dwing, \[dwIN\]   |
+| slill, \[slIl\] | slive, \[sl2v\]   | neen, \[nin\]     | spling, \[splIN\] |
+| prill, \[prIl\] | blide, \[bl2d\]   | theep, \[Tip\]    | sking, \[skIN\]   |
+| swurn, \[sw3n\] | schmite, \[Sm2t\] | dreep, \[drip\]   | ming, \[mIN\]     |
+| murn, \[m3n\]   | snite, \[sn2t\]   | schmeem, \[Smim\] | thrim, \[TrIm\]   |
 
 2. Nonword examples.
 
@@ -60,14 +60,14 @@ class, as seen in Table 3.
 
 | category | word   | regular_form | irregular_form |
 |:---------|:-------|:-------------|:---------------|
-| burnt    | trurn  | trurned      | trurnt         |
-| burnt    | sprurn | sprurned     | sprurnt        |
-| drove    | slive  | slived       | slove          |
-| drove    | klide  | klided       | klode          |
-| kept     | skeep  | skeeped      | skept          |
-| kept     | squeep | squeeped     | squept         |
-| sang     | twim   | twimmed      | twam           |
-| sang     | vink   | vinked       | vank           |
+| burnt    | skrurn | skrurned     | skrurnt        |
+| burnt    | skrill | skrilled     | skrilt         |
+| drove    | zite   | zited        | zote           |
+| drove    | skrine | skrined      | skrone         |
+| kept     | dreen  | dreened      | drent          |
+| kept     | sleel  | sleeled      | slelt          |
+| sang     | dwing  | dwinged      | dwang          |
+| sang     | shing  | shinged      | shang          |
 
 3. Regular and irregular choices in the Wug task.
 

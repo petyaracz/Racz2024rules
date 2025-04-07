@@ -171,7 +171,7 @@ Following both Rácz, Beckner, Hay & Pierrehumbert (2020) and Albright & Hayes (
 
 ## Results
 
-```{r baseline_156, fig.width = 7, fig.height = 3}
+```{r baseline_156, fig.width = 7, fig.height = 3, dpi = 1200}
 cor = d |> 
   distinct(word,baseline_log_odds_regular,weight) |> 
   summarise(
@@ -226,7 +226,7 @@ Coplayers varied across two conditions. In terms of (A) rate of regularisation, 
 
 Rácz, Beckner, Hay & Pierrehumbert (2020) found that the coplayer changed participant behaviour. Nonword ratings shifted from the pretest to the posttest. If participants rated words as highly regular in the pretest, they rated these more irregular in the posttest, after interacting with the reversed versus the typical coplayer. Since no participant saw the same verb twice, this effect was due to lexical, rather than word priming. The reversed coplayer used verbs in a certain way, and the participant rated similar verbs in the posttest in a certain way. The difference with the random coplayer was less clearcut. This can be seen in Figure 2.
 
-```{r mainres1, fig.width = 4, fig.height = 3}
+```{r mainres1, fig.width = 4, fig.height = 3, dpi = 1200}
 d |>
   filter(phase != 'esp') |> 
   count(word,reg_dist,phase,resp_reg) |> 
@@ -283,7 +283,7 @@ The MGL predicts participant responses in general. So, if we look at how MGL pre
 
 The main effect of interest is coplayer lexical distribution. The MGL weight has a stronger effect on posttest responses if the participant played a typical coplayer. This makes sense: a typical coplayer reinforces existing lexical distributions. The MGL's predictive power diminishes when it is set against participants who met a reversed coplayer. What are the mechanics of this shift?
 
-```{r mglbreakdown1, fig.width = 7, fig.height = 12}
+```{r mglbreakdown1, fig.width = 7, fig.height = 12, dpi = 1200}
 
 p3 = d |>
   filter(phase == 'posttest') |> 
@@ -354,7 +354,7 @@ The top panel shows individual word weights. It is similar to Figure 2. The MGL 
 
 Posttest patterns come to existence during the interactive session with the coplayer, the ESP task. Participants gradually diverge from the MGL predictions during the ESP task. We visualise this in Figure 4. The top panel shows the relationship between MGL weights and participant responses in each of the 52 trials of the ESP task. For each trial, we calculated a Pearson correlation between word weights and participant responses across the three coplayer lexical distributions. Trials are shown on the x axis. The correlations are shown on the y axis. The correlations vary a lot, so we only plot a loess smooth for each condition. We see that the correlations hold steady for the typical condition, where the coplayer makes lexically typical choices. They gradually deteriorate across the other conditions, in which the coplayer's choices go against the participants' (and the MGL's) expected lexical distributions. The bottom panel breaks this down into regular and irregular rules. The two rule types move in tandem: it is not the case that the overall trajectory shifts because of the behaviour of the regular rules, for instance.
 
-```{r mglbreakdown2, fig.width = 7, fig.height = 6}
+```{r mglbreakdown2, fig.width = 7, fig.height = 6, dpi = 1200}
 
 trials = d |> 
   filter(phase == 'esp') |> 
@@ -449,7 +449,7 @@ If the rule is regular, it works very well if every verb it applies gets a regul
 
 These total rewards and penalties are used to update the rule's confidence. If the participant starts the ESP task with a very strong regular rule but keeps picking irregular forms for verbs in the rule's scope, the rule's confidence is steadily demoted. If the rule works well across the task, its confidence will increase. The rate of this increase / decrease is controlled by the parameter `learning rate`, which ranges between 0.5 and 25, with a .5 step. We fit the rule updater with two extra hyperparameters. These are (a) rule type ((i) updating both regular and irregular rules, (ii) updating regular rules only, (iii) updating irregular rules only) and (b) response type ((i) updating based on co-player responses or (ii) the participant's own responses in the ESP test phase).
 
-```{r rulemove1, fig.width = 9, fig.height = 4}
+```{r rulemove1, fig.width = 9, fig.height = 4, dpi = 1200}
 curves |> 
   mutate(which_responses2 = glue('{which_responses} responses')) |> 
   ggplot(aes(learning_rate,c, colour = which_rules)) +
@@ -516,7 +516,7 @@ In this set, the baseline + updating MGL is the best fit. There is more mileage 
 
 If we ignore the hierarchy of the data, we can plot ROC curves for each model.
 
-```{r roc_curve, fig.width=5,fig.height=3}
+```{r roc_curve, fig.width=5,fig.height=3, dpi = 1200}
 
 roc_data = test2_2 |> 
   distinct(resp_post_reg,individual_gcm_features,individual_mgl_features,baseline_mgl_features_updating) |> 
