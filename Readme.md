@@ -39,13 +39,13 @@ four regular/irregular categories:
 Nonwords were transcribed into the DISC phonetic alphabet. Examples are
 in Table 2.
 
-| burnt            | drove             | kept              | sang             |
-|:-----------------|:------------------|:------------------|:-----------------|
-| rurn, \[r3n\]    | shride, \[Sr2d\]  | cheen, \[Jin\]    | thrim, \[TrIm\]  |
-| threll, \[TrEl\] | jine, \[\_2n\]    | squeep, \[skwip\] | shring, \[SrIN\] |
-| brurn, \[br3n\]  | blide, \[bl2d\]   | feem, \[fim\]     | sning, \[snIN\]  |
-| prurn, \[pr3n\]  | thide, \[T2d\]    | theep, \[Tip\]    | frim, \[frIm\]   |
-| trurn, \[tr3n\]  | squide, \[skw2d\] | skeen, \[skin\]   | gling, \[glIN\]  |
+| burnt           | drove           | kept             | sang               |
+|:----------------|:----------------|:-----------------|:-------------------|
+| snurn, \[sn3n\] | snine, \[sn2n\] | kleem, \[klim\]  | grink, \[grINk\]   |
+| trell, \[trEl\] | slive, \[sl2v\] | shreep, \[Srip\] | smink, \[smINk\]   |
+| prurn, \[pr3n\] | quide, \[kw2d\] | pleel, \[plil\]  | thring, \[TrIN\]   |
+| drell, \[drEl\] | klide, \[kl2d\] | geem, \[gim\]    | glink, \[glINk\]   |
+| thurn, \[T3n\]  | vrite, \[vr2t\] | dreep, \[drip\]  | skrink, \[skrINk\] |
 
 2. Nonword examples.
 
@@ -60,14 +60,14 @@ class, as seen in Table 3.
 
 | category | word   | regular_form | irregular_form |
 |:---------|:-------|:-------------|:---------------|
-| burnt    | hurn   | hurned       | hurnt          |
-| burnt    | strill | strilled     | strilt         |
-| drove    | gline  | glined       | glone          |
-| drove    | splive | splived      | splove         |
-| kept     | squeen | squeened     | squent         |
-| kept     | dweep  | dweeped      | dwept          |
-| sang     | sking  | skinged      | skang          |
-| sang     | shring | shringed     | shrang         |
+| burnt    | trurn  | trurned      | trurnt         |
+| burnt    | sprurn | sprurned     | sprurnt        |
+| drove    | slive  | slived       | slove          |
+| drove    | klide  | klided       | klode          |
+| kept     | skeep  | skeeped      | skept          |
+| kept     | squeep | squeeped     | squept         |
+| sang     | twim   | twimmed      | twam           |
+| sang     | vink   | vinked       | vank           |
 
 3. Regular and irregular choices in the Wug task.
 
@@ -399,29 +399,13 @@ model weights as a predictor and a participant grouping factor. We
 compare the GCM, the baseline + individual MGL, and the baseline +
 updating MGL. We fit separate models because of collinearity issues.
 
-    ## # A tibble: 4 × 9
-    ##   effect   group term  estimate std.error statistic   p.value conf.low conf.high
-    ##   <chr>    <chr> <chr>    <dbl>     <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
-    ## 1 fixed    <NA>  (Int…   -53.5       5.27    -10.2   3.28e-24    -63.8    -43.2 
-    ## 2 fixed    <NA>  base…    73.2       6.25     11.7   9.18e-32     61.0     85.5 
-    ## 3 fixed    <NA>  indi…   -19.3       4.79     -4.04  5.30e- 5    -28.7     -9.96
-    ## 4 ran_pars part… sd__…     2.03     NA        NA    NA            NA       NA
+| Name | Model | AIC | AIC_wt | BIC | BIC_wt | R2_conditional | R2_marginal | ICC | RMSE |
+|:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|
+| fit_gcm | glmerMod | 4128.51 | 0.00 | 4153.48 | 0.00 | 0.57 | 0.04 | 0.56 | 0.41 |
+| fit_mgl_1 | glmerMod | 4106.21 | 0.01 | 4131.18 | 0.01 | 0.51 | 0.04 | 0.49 | 0.41 |
+| fit_mgl_2 | glmerMod | 4097.29 | 0.99 | 4122.26 | 0.99 | 0.50 | 0.04 | 0.48 | 0.41 |
 
-    ## # A tibble: 4 × 9
-    ##   effect   group term  estimate std.error statistic   p.value conf.low conf.high
-    ##   <chr>    <chr> <chr>    <dbl>     <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
-    ## 1 fixed    <NA>  (Int…   -2.96      0.349    -8.49   2.12e-17   -3.65     -2.28 
-    ## 2 fixed    <NA>  base…    3.47      0.299    11.6    3.62e-31    2.88      4.05 
-    ## 3 fixed    <NA>  indi…   -0.184     0.318    -0.577  5.64e- 1   -0.807     0.440
-    ## 4 ran_pars part… sd__…    1.78     NA        NA     NA          NA        NA
-
-    ## # Comparison of Model Performance Indices
-    ## 
-    ## Name      |    Model |  AIC (weights) |  BIC (weights) | R2 (cond.) | R2 (marg.) |   ICC |  RMSE
-    ## ------------------------------------------------------------------------------------------------
-    ## fit_gcm   | glmerMod | 4128.5 (<.001) | 4153.5 (<.001) |      0.573 |      0.040 | 0.555 | 0.412
-    ## fit_mgl_1 | glmerMod | 4106.2 (0.011) | 4131.2 (0.011) |      0.511 |      0.038 | 0.492 | 0.412
-    ## fit_mgl_2 | glmerMod | 4097.3 (0.989) | 4122.3 (0.989) |      0.503 |      0.044 | 0.480 | 0.411
+Table 9: Model comparison
 
 In this set, the baseline + updating MGL is the best fit. There is more
 mileage in tuning the GCM and the original MGL as well, but finding an

@@ -117,6 +117,7 @@ t3 = d |>
   sample_n(2)
 
 t3 |> 
+  mutate(across(where(is.double), round, digits = 2)) |> 
   write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table3')
 t3 |> 
   kable('simple', caption = '3. Regular and irregular choices in the Wug task.')
@@ -493,10 +494,10 @@ We fit a hierarchical logistic regression model predicting participant responses
 # I'm sane
 
 fit_gcm = glmer(resp_post_reg ~ baseline_gcm_features + individual_gcm_features + (1|participant_id), data = test2_2, family = binomial)
-tidy(fit_gcm, conf.int = T)
+# tidy(fit_gcm, conf.int = T)
 # check_collinearity(fit_gcm)
 fit_mgl_1 = glmer(resp_post_reg ~ baseline_mgl_features + individual_mgl_features + (1|participant_id), data = test2_2, family = binomial)
-tidy(fit_mgl_1, conf.int = T)
+# tidy(fit_mgl_1, conf.int = T)
 # check_collinearity(fit_mgl_1)
 fit_mgl_2 = glmer(resp_post_reg ~ baseline_mgl_features + baseline_mgl_features_updating + (1|participant_id), data = test2_2, family = binomial)
 # tidy(fit_mgl_2, conf.int = T)
@@ -506,7 +507,8 @@ compo_table = compare_performance(fit_gcm,fit_mgl_1,fit_mgl_2, metrics = 'common
 compo_table |> 
    write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table9')
 
-compo_table
+compo_table |> 
+  kable(digits = 2, caption = 'Table 9: Model comparison')
 
 ```
 
