@@ -27,6 +27,7 @@ library(performance)
 library(sjPlot)
 library(scales)
 library(googlesheets4)
+library(pROC)
 
 # -- auth -- #
 
@@ -493,21 +494,65 @@ We fit a hierarchical logistic regression model predicting participant responses
 
 fit_gcm = glmer(resp_post_reg ~ baseline_gcm_features + individual_gcm_features + (1|participant_id), data = test2_2, family = binomial)
 tidy(fit_gcm, conf.int = T)
-check_collinearity(fit_gcm)
+# check_collinearity(fit_gcm)
 fit_mgl_1 = glmer(resp_post_reg ~ baseline_mgl_features + individual_mgl_features + (1|participant_id), data = test2_2, family = binomial)
 tidy(fit_mgl_1, conf.int = T)
-check_collinearity(fit_mgl_1)
+# check_collinearity(fit_mgl_1)
 fit_mgl_2 = glmer(resp_post_reg ~ baseline_mgl_features + baseline_mgl_features_updating + (1|participant_id), data = test2_2, family = binomial)
-tidy(fit_mgl_2, conf.int = T)
+# tidy(fit_mgl_2, conf.int = T)
 
 compo_table = compare_performance(fit_gcm,fit_mgl_1,fit_mgl_2, metrics = 'common')
 
 compo_table |> 
    write_sheet('https://docs.google.com/spreadsheets/d/1RE2MWEZhyh4cwsOHek_T8VkAQ3O5aiowtTeE_meL1lU/edit?usp=sharing', 'table9')
 
+compo_table
+
 ```
 
 In this set, the baseline + updating MGL is the best fit. There is more mileage in tuning the GCM and the original MGL as well, but finding an MGL setup that improves on the baseline is an important result.
+
+If we ignore the hierarchy of the data, we can plot ROC curves for each model.
+
+```{r roc_curve, fig.width=5,fig.height=3}
+
+roc_data = test2_2 |> 
+  distinct(resp_post_reg,individual_gcm_features,individual_mgl_features,baseline_mgl_features_updating) |> 
+  pivot_longer(cols = -resp_post_reg, names_to = "model", values_to = "prediction") |> 
+  group_by(model)  |> 
+  summarise(roc_obj = list(roc(resp_post_reg, prediction)))
+
+
+# Create a data frame with the ROC curve data
+roc_df = roc_data %>%
+  mutate(
+    tpr = map(roc_obj, ~ .$sensitivities),
+    fpr = map(roc_obj, ~ 1 - .$specificities),
+    auc = map_dbl(roc_obj, ~ .$auc)
+  ) %>%
+  unnest(c(tpr, fpr))
+
+roc_df |> 
+  mutate(
+    model2 = case_when(
+      str_detect(model, 'updating') ~ 'rule updating model',
+      str_detect(model, 'individual_mgl') ~ 'rule building model',
+      str_detect(model, 'gcm') ~ 'analogical model'
+    ),
+    model2 = glue('{model2}, AUC: {round(auc,2)}')
+  ) |> 
+  ggplot(aes(x = fpr, y = tpr, color = model2)) +
+  geom_line() +
+  geom_abline(linetype = "dashed", color = "grey") +
+  labs(
+    title = "ROC Curves",
+    x = "False Positive Rate",
+    y = "True Positive Rate",
+    color = "Model"
+  ) +
+  theme_minimal() +
+  scale_colour_colorblind()
+```
 
 ## Discussion
 

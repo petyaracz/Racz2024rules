@@ -39,13 +39,13 @@ four regular/irregular categories:
 Nonwords were transcribed into the DISC phonetic alphabet. Examples are
 in Table 2.
 
-| burnt             | drove             | kept            | sang             |
-|:------------------|:------------------|:----------------|:-----------------|
-| skurn, \[sk3n\]   | schmite, \[Sm2t\] | neem, \[nim\]   | sking, \[skIN\]  |
-| vurn, \[v3n\]     | snine, \[sn2n\]   | sneen, \[snin\] | chim, \[JIm\]    |
-| sprurn, \[spr3n\] | beeve, \[biv\]    | dreep, \[drip\] | schmim, \[SmIm\] |
-| slill, \[slIl\]   | brive, \[br2v\]   | fleel, \[flil\] | quink, \[kwINk\] |
-| brurn, \[br3n\]   | jine, \[\_2n\]    | kleem, \[klim\] | smim, \[smIm\]   |
+| burnt            | drove             | kept              | sang             |
+|:-----------------|:------------------|:------------------|:-----------------|
+| rurn, \[r3n\]    | shride, \[Sr2d\]  | cheen, \[Jin\]    | thrim, \[TrIm\]  |
+| threll, \[TrEl\] | jine, \[\_2n\]    | squeep, \[skwip\] | shring, \[SrIN\] |
+| brurn, \[br3n\]  | blide, \[bl2d\]   | feem, \[fim\]     | sning, \[snIN\]  |
+| prurn, \[pr3n\]  | thide, \[T2d\]    | theep, \[Tip\]    | frim, \[frIm\]   |
+| trurn, \[tr3n\]  | squide, \[skw2d\] | skeen, \[skin\]   | gling, \[glIN\]  |
 
 2. Nonword examples.
 
@@ -58,16 +58,16 @@ tense form for each nonword, displayed on buttons. The regular past
 tense form was the -ed form. The irregular form depended on the verb
 class, as seen in Table 3.
 
-| category | word    | regular_form | irregular_form |
-|:---------|:--------|:-------------|:---------------|
-| burnt    | twell   | twelled      | twelt          |
-| burnt    | trell   | trelled      | trelt          |
-| drove    | schmite | schmited     | schmote        |
-| drove    | swide   | swided       | swode          |
-| kept     | squeep  | squeeped     | squept         |
-| kept     | preem   | preemed      | premt          |
-| sang     | quing   | quinged      | quang          |
-| sang     | dwim    | dwimmed      | dwam           |
+| category | word   | regular_form | irregular_form |
+|:---------|:-------|:-------------|:---------------|
+| burnt    | hurn   | hurned       | hurnt          |
+| burnt    | strill | strilled     | strilt         |
+| drove    | gline  | glined       | glone          |
+| drove    | splive | splived      | splove         |
+| kept     | squeen | squeened     | squent         |
+| kept     | dweep  | dweeped      | dwept          |
+| sang     | sking  | skinged      | skang          |
+| sang     | shring | shringed     | shrang         |
 
 3. Regular and irregular choices in the Wug task.
 
@@ -407,17 +407,6 @@ updating MGL. We fit separate models because of collinearity issues.
     ## 3 fixed    <NA>  indi…   -19.3       4.79     -4.04  5.30e- 5    -28.7     -9.96
     ## 4 ran_pars part… sd__…     2.03     NA        NA    NA            NA       NA
 
-    ## # Check for Multicollinearity
-    ## 
-    ## Low Correlation
-    ## 
-    ##                     Term  VIF   VIF 95% CI Increased SE Tolerance
-    ##    baseline_gcm_features 1.42 [1.37, 1.49]         1.19      0.70
-    ##  individual_gcm_features 1.42 [1.37, 1.49]         1.19      0.70
-    ##  Tolerance 95% CI
-    ##      [0.67, 0.73]
-    ##      [0.67, 0.73]
-
     ## # A tibble: 4 × 9
     ##   effect   group term  estimate std.error statistic   p.value conf.low conf.high
     ##   <chr>    <chr> <chr>    <dbl>     <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
@@ -426,28 +415,22 @@ updating MGL. We fit separate models because of collinearity issues.
     ## 3 fixed    <NA>  indi…   -0.184     0.318    -0.577  5.64e- 1   -0.807     0.440
     ## 4 ran_pars part… sd__…    1.78     NA        NA     NA          NA        NA
 
-    ## # Check for Multicollinearity
+    ## # Comparison of Model Performance Indices
     ## 
-    ## Low Correlation
-    ## 
-    ##                     Term  VIF   VIF 95% CI Increased SE Tolerance
-    ##    baseline_mgl_features 1.19 [1.15, 1.23]         1.09      0.84
-    ##  individual_mgl_features 1.19 [1.15, 1.23]         1.09      0.84
-    ##  Tolerance 95% CI
-    ##      [0.81, 0.87]
-    ##      [0.81, 0.87]
-
-    ## # A tibble: 4 × 9
-    ##   effect   group term  estimate std.error statistic   p.value conf.low conf.high
-    ##   <chr>    <chr> <chr>    <dbl>     <dbl>     <dbl>     <dbl>    <dbl>     <dbl>
-    ## 1 fixed    <NA>  (Int…    -4.27     0.525     -8.13  4.33e-16   -5.30      -3.24
-    ## 2 fixed    <NA>  base…     3.03     0.298     10.2   3.07e-24    2.45       3.62
-    ## 3 fixed    <NA>  base…     1.60     0.533      3.00  2.69e- 3    0.555      2.65
-    ## 4 ran_pars part… sd__…     1.74    NA         NA    NA          NA         NA
+    ## Name      |    Model |  AIC (weights) |  BIC (weights) | R2 (cond.) | R2 (marg.) |   ICC |  RMSE
+    ## ------------------------------------------------------------------------------------------------
+    ## fit_gcm   | glmerMod | 4128.5 (<.001) | 4153.5 (<.001) |      0.573 |      0.040 | 0.555 | 0.412
+    ## fit_mgl_1 | glmerMod | 4106.2 (0.011) | 4131.2 (0.011) |      0.511 |      0.038 | 0.492 | 0.412
+    ## fit_mgl_2 | glmerMod | 4097.3 (0.989) | 4122.3 (0.989) |      0.503 |      0.044 | 0.480 | 0.411
 
 In this set, the baseline + updating MGL is the best fit. There is more
 mileage in tuning the GCM and the original MGL as well, but finding an
 MGL setup that improves on the baseline is an important result.
+
+If we ignore the hierarchy of the data, we can plot ROC curves for each
+model.
+
+![](figures/roc_curve-1.png)<!-- -->
 
 ## Discussion
 
