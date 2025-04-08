@@ -464,6 +464,8 @@ curves |>
 
 Figure 5 shows how the updated rules fare in the reversed condition posttest. The x axis shows model learning rate, the y axis shows model accuracy, as expressed by the concordance index 'C' of the individual participant responses and the model prediction. The colours show which rules were updated in a given model. The two panels show models trained on player or co-player responses. The best model is trained on the participant's own responses, tunes regular rules only, and has a comparatively high learning rate. This can be seen in Table 7.
 
+Note that the effect of learning rate on final word weights is indirect. The learning rate determines how much the confidence of a specific rule is updated in each test trial. The final weight is the confidence of the best regular rule / the summed confidence of the best regular and irregular rule. A very high learning rate will result in rule confidences that are over 1, which are not interpretable in the original Minimal Generalisation Learner. Word weight will still be bounded by 0-1.
+
 ```{r best_outcomes}
 best_outcomes = outcomes |> 
   distinct(learning_rate,which_rules,which_responses,c) |> 

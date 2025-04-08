@@ -1,7 +1,7 @@
 Tuning minimal generalisations on a morphological learning task
 ================
 Rácz, Péter
-7 April, 2025
+8 April, 2025
 
 A cognitively plausible model of people’s morphophonological intuitions
 in a Wug task is the Minimal Generalisation Learner (MGL). The MGL looks
@@ -39,13 +39,13 @@ four regular/irregular categories:
 Nonwords were transcribed into the DISC phonetic alphabet. Examples are
 in Table 2.
 
-| burnt           | drove             | kept              | sang              |
-|:----------------|:------------------|:------------------|:------------------|
-| rurn, \[r3n\]   | chite, \[J2t\]    | sneem, \[snim\]   | dwing, \[dwIN\]   |
-| slill, \[slIl\] | slive, \[sl2v\]   | neen, \[nin\]     | spling, \[splIN\] |
-| prill, \[prIl\] | blide, \[bl2d\]   | theep, \[Tip\]    | sking, \[skIN\]   |
-| swurn, \[sw3n\] | schmite, \[Sm2t\] | dreep, \[drip\]   | ming, \[mIN\]     |
-| murn, \[m3n\]   | snite, \[sn2t\]   | schmeem, \[Smim\] | thrim, \[TrIm\]   |
+| burnt             | drove             | kept             | sang             |
+|:------------------|:------------------|:-----------------|:-----------------|
+| glill, \[glIl\]   | splide, \[spl2d\] | zeem, \[zim\]    | glink, \[glINk\] |
+| splurn, \[spl3n\] | dwide, \[dw2d\]   | neem, \[nim\]    | frim, \[frIm\]   |
+| lell, \[lEl\]     | spride, \[spr2d\] | neen, \[nin\]    | sping, \[spIN\]  |
+| klill, \[klIl\]   | shride, \[Sr2d\]  | zeep, \[zip\]    | smink, \[smINk\] |
+| drurn, \[dr3n\]   | squine, \[skw2n\] | shreen, \[Srin\] | shing, \[SIN\]   |
 
 2. Nonword examples.
 
@@ -60,14 +60,14 @@ class, as seen in Table 3.
 
 | category | word   | regular_form | irregular_form |
 |:---------|:-------|:-------------|:---------------|
-| burnt    | skrurn | skrurned     | skrurnt        |
-| burnt    | skrill | skrilled     | skrilt         |
-| drove    | zite   | zited        | zote           |
-| drove    | skrine | skrined      | skrone         |
+| burnt    | smill  | smilled      | smilt          |
+| burnt    | yill   | yilled       | yilt           |
+| drove    | gline  | glined       | glone          |
+| drove    | squide | squided      | squode         |
+| kept     | zeem   | zeemed       | zemt           |
 | kept     | dreen  | dreened      | drent          |
-| kept     | sleel  | sleeled      | slelt          |
-| sang     | dwing  | dwinged      | dwang          |
-| sang     | shing  | shinged      | shang          |
+| sang     | grink  | grinked      | grank          |
+| sang     | vink   | vinked       | vank           |
 
 3. Regular and irregular choices in the Wug task.
 
@@ -379,6 +379,15 @@ rules were updated in a given model. The two panels show models trained
 on player or co-player responses. The best model is trained on the
 participant’s own responses, tunes regular rules only, and has a
 comparatively high learning rate. This can be seen in Table 7.
+
+Note that the effect of learning rate on final word weights is indirect.
+The learning rate determines how much the confidence of a specific rule
+is updated in each test trial. The final weight is the confidence of the
+best regular rule / the summed confidence of the best regular and
+irregular rule. A very high learning rate will result in rule
+confidences that are over 1, which are not interpretable in the original
+Minimal Generalisation Learner. Word weight will still be bounded by
+0-1.
 
 | learning_rate | which_rules | which_responses |    c |
 |--------------:|:------------|:----------------|-----:|
