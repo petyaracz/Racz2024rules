@@ -31,6 +31,9 @@ mgl2b = stan_glmer(resp_post_reg ~ baseline_mgl_features + individual_mgl_featur
 
 mgl2u = stan_glmer(resp_post_reg ~ baseline_mgl_features + baseline_mgl_features_updating + (1|participant_id), family = binomial, data = test2_2, chains = 4, cores = 4)
 
+# for brms
+mgl2ub = stan_glmer(resp_post_reg ~ baseline_mgl_features + individual_mgl_features + baseline_mgl_features_updating + (1|participant_id), family = binomial, data = test2_2, chains = 4, cores = 4)
+
 test2_2$`corpus-only learner` = test2_2$baseline_mgl_features
 test2_2$`rule-building learner` = test2_2$individual_mgl_features
 test2_2$`rule-updating learner` = test2_2$baseline_mgl_features_updating
@@ -82,6 +85,18 @@ plot(mgl2u, 'areas', regex_pars = 'mgl') +
 plot(mgl3, 'areas', regex_pars = 'learner') + ggtitle('Learner contributions to\npredicting post-test answers')
 ggsave('figures/linear_model.png', dpi = 1200, width = 6, height = 3, bg = 'white')
 
+posterior_samples = mgl2ub |> 
+  as.matrix() |> 
+  as_tibble()
+
+posterior_samples |> 
+  select(baseline_mgl_features,individual_mgl_features,baseline_mgl_features_updating) |> 
+  rownames_to_column(var = 'iter') |> 
+  pivot_longer(-iter) |> 
+  filter(value > 0) |> 
+  count(name) |> 
+  mutate(percent = n / 40)
+  
 # -- write -- #
 
 save(gcm1, file = 'models/gcm1.rda')
