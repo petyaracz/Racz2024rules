@@ -1,7 +1,24 @@
-Tuning minimal generalisations on a morphological learning task
+Supplementary Information: Minimal generalisations in short-term
+morphological convergence
 ================
 Rácz, Péter
-8 April, 2025
+15 April, 2025
+
+# Summary
+
+This supplementary information covers the baseline task and the main
+morphological convergence task reported in Rácz, Beckner, Hay, and
+Pierrehumbert (2020), and covers the implementation and accuracy of the
+Minimal Generalisation Learner on both task types.
+
+This is a supplement to the paper “Minimal generalisations in short-term
+morphological convergence”. The paper only covers the main convergence
+task and omits the detail on how the model performs on the convergence
+part. It focusses on how the learner uses the main convergence task
+(which Rácz et al call the “ESP task”) to adjust its training and how it
+predicts participant responses in the post-test.
+
+# The MGL
 
 A cognitively plausible model of people’s morphophonological intuitions
 in a Wug task is the Minimal Generalisation Learner (MGL). The MGL looks
@@ -39,13 +56,13 @@ four regular/irregular categories:
 Nonwords were transcribed into the DISC phonetic alphabet. Examples are
 in Table 2.
 
-| burnt             | drove             | kept             | sang             |
-|:------------------|:------------------|:-----------------|:-----------------|
-| glill, \[glIl\]   | splide, \[spl2d\] | zeem, \[zim\]    | glink, \[glINk\] |
-| splurn, \[spl3n\] | dwide, \[dw2d\]   | neem, \[nim\]    | frim, \[frIm\]   |
-| lell, \[lEl\]     | spride, \[spr2d\] | neen, \[nin\]    | sping, \[spIN\]  |
-| klill, \[klIl\]   | shride, \[Sr2d\]  | zeep, \[zip\]    | smink, \[smINk\] |
-| drurn, \[dr3n\]   | squine, \[skw2n\] | shreen, \[Srin\] | shing, \[SIN\]   |
+| burnt           | drove             | kept            | sang               |
+|:----------------|:------------------|:----------------|:-------------------|
+| slurn, \[sl3n\] | splide, \[spl2d\] | preem, \[prim\] | splink, \[splINk\] |
+| murn, \[m3n\]   | pite, \[p2t\]     | dweep, \[dwip\] | dwim, \[dwIm\]     |
+| zell, \[zEl\]   | pline, \[pl2n\]   | geem, \[gim\]   | thrim, \[TrIm\]    |
+| prurn, \[pr3n\] | twite, \[tw2t\]   | cheel, \[Jil\]  | ming, \[mIN\]      |
+| klill, \[klIl\] | dwide, \[dw2d\]   | jeem, \[\_im\]  | strink, \[strINk\] |
 
 2. Nonword examples.
 
@@ -60,18 +77,18 @@ class, as seen in Table 3.
 
 | category | word   | regular_form | irregular_form |
 |:---------|:-------|:-------------|:---------------|
-| burnt    | smill  | smilled      | smilt          |
-| burnt    | yill   | yilled       | yilt           |
-| drove    | gline  | glined       | glone          |
-| drove    | squide | squided      | squode         |
-| kept     | zeem   | zeemed       | zemt           |
-| kept     | dreen  | dreened      | drent          |
-| sang     | grink  | grinked      | grank          |
-| sang     | vink   | vinked       | vank           |
+| burnt    | rurn   | rurned       | rurnt          |
+| burnt    | skell  | skelled      | skelt          |
+| drove    | trine  | trined       | trone          |
+| drove    | pline  | plined       | plone          |
+| kept     | squeep | squeeped     | squept         |
+| kept     | streel | streeled     | strelt         |
+| sang     | nink   | ninked       | nank           |
+| sang     | gring  | gringed      | grang          |
 
 3. Regular and irregular choices in the Wug task.
 
-## Minimal Generalisation Learner (MGL)
+## Fitting the MGL on the baseline task
 
 Rácz, Beckner, Hay and Pierrehumbert (2020) trained the Minimal
 Generalisation Learner (MGL) on English verbs in CELEX and used it to
@@ -79,16 +96,17 @@ make predictions for the nonwords. They trained the MGL on regular and
 irregular English verbs with a minimum frequency cutoff of 10: 4160
 past/present verb transcriptions. They used the best parameters
 identified by Albright & Hayes (2003) for a similar task: lower and
-upper confidence limits of 55% and 95%.
+upper confidence limits of 55% and 95%. We call this the corpus-based
+MGL.
 
-The MGL generates 61 rules for the 156 target forms from the training
-data. Such rules have a structural description that matches a target
-nonword in the task and generates an output which is available to
-participants to pick. A rule that generates the `sing -> sang` pattern
-matches target forms for nonwords that look like `sing`. It generates
-one of the past tense forms available in the forced-choice task. A rule
-that generates the `sing -> sung` pattern does not generate an available
-past tense form.
+The corpus-based MGL generates 61 rules for the 156 target forms from
+the training data. Such rules have a structural description that matches
+a target nonword in the task and generates an output which is available
+to participants to pick. A rule that generates the `sing -> sang`
+pattern matches target forms for nonwords that look like `sing`. It
+generates one of the past tense forms available in the forced-choice
+task. A rule that generates the `sing -> sung` pattern does not generate
+an available past tense form.
 
 | rule_tidy | type | scope | hits | reliability | confidence | related_forms | exceptions |
 |:---|:---|---:|---:|---:|---:|:---|:---|
@@ -135,35 +153,36 @@ Table 5. Best regular / irregular rules for some sang forms.
 
 Following both Rácz, Beckner, Hay & Pierrehumbert (2020) and Albright &
 Hayes (2003) we can pick the best regular and the best irregular rule
-and calculate a weight, which is the confidence of the best regular rule
-/ (the confidence of the best regular rule + the confidence of the best
-irregular rule). If there is no irregular rule, this will default to 1.
-We will work with the rules that are best rules for any form and call
-these the relevant rules.
+and calculate a **word weight**, which is the confidence of the best
+regular rule / (the confidence of the best regular rule + the confidence
+of the best irregular rule). If there is no irregular rule, this will
+default to 1. We will work with the rules that are best rules for any
+form and call these the relevant rules.
 
 ## Results
 
 ![](figures/baseline_156-1.png)<!-- -->
 
-Figure 1 shows how MGL predictions correlate with participant responses
-in the baseline etask. The left panel shows the relationship between
-word weights (x axis) and the log odds of regular and irregular choices
-made by participants in the baseline task (y axis). The right panel
-breaks down the weight into its two components: the best regular and
-irregular rule for each word. Since, on the whole, regular rules have
-higher confidence than irregular rules, we rescaled rule confidence
-across these groups so they are more directly comparable.
+Figure 1 shows how corpus-based MGL predictions correlate with
+participant responses in the baseline task. The left panel shows the
+relationship between word weights (x axis) and the log odds of regular
+and irregular choices made by participants in the baseline task (y
+axis). The right panel breaks down the weight into its two components:
+the best regular and irregular rule for each word. Since, on the whole,
+regular rules have higher confidence than irregular rules, we rescaled
+rule confidence across these groups so they are more directly
+comparable.
 
-The MGL weights correlate with the response odds. We see that the
-trajectory of this relationship is built up from two opposite
-trajectories for best rules. For words with low regular weight, this
-weight comes from irregular rules that have low confidence themselves
-but, relatively speaking, outweigh the relevant regular rules. For words
-with higher regular weight, this comes from two things. First,
-high-confidence, large-scale regular rules apply to these, and these
-rules bring up the regular weight. Second, the relevant irregular rules
-have very low confidence. This breakdown of the MGL’s regular weight
-will become relevant later.
+The corpus-based MGL’s word weights correlate with the response odds. We
+see that the trajectory of this relationship is built up from two
+opposite trajectories for best rules. For words with low regular weight,
+this weight comes from irregular rules that have low confidence
+themselves but, relatively speaking, outweigh the relevant regular
+rules. For words with higher regular weight, this comes from two things.
+First, high-confidence, large-scale regular rules apply to these, and
+these rules bring up the regular weight. Second, the relevant irregular
+rules have very low confidence. This breakdown of the MGL’s regular
+weight will become relevant later.
 
 Note that, from the MGL’s perspective, the main technical difference
 between regular and irregular rules is that regular rules tend to have
@@ -176,7 +195,7 @@ likewise find that the minimal generalisations (rules) of the MGL are
 more accurate in predicting participant responses than an instance-based
 learner, despite the higher level of abstraction.
 
-# The ESP experiment
+# The ESP experiment (convergence task)
 
 Rácz, Beckner, Hay & Pierrehumbert (2020) ran a second online experiment
 using new participants and the nonwords from the baseline experiment.
@@ -209,7 +228,7 @@ verbs at random (the random coplayer). This means that a typical
 coplayer makes choices that are characteristic of an average
 participant. A reversed coplayer turns these choices upside down.
 
-## Results
+## Results: Participant behaviour
 
 Rácz, Beckner, Hay & Pierrehumbert (2020) found that the coplayer
 changed participant behaviour. Nonword ratings shifted from the pretest
@@ -230,81 +249,95 @@ of the experiment and at the end, after encountering the coplayer.
 However, this correlation is weaker if participants played a reversed
 coplayer, demonstrating the coplayer’s influence.
 
-# What changes in the posttest
+# What changes in the posttest?
 
-The MGL predicts participant responses in general. So, if we look at how
+The corpus-based MGL predicts participant responses based on the Celex
+word list. It models a generic participant. The corpus-based MGL does
+not learn in the convergence task. So, if we look at how corpus-based
 MGL prediction accuracy varies across coplayers in the posttest, we find
-a pattern similar to how these responses shift in the posttest.
+a pattern similar to how these responses themselves shift in the
+posttest.
 
-The main effect of interest is coplayer lexical distribution. The MGL
-weight has a stronger effect on posttest responses if the participant
-played a typical coplayer. This makes sense: a typical coplayer
-reinforces existing lexical distributions. The MGL’s predictive power
-diminishes when it is set against participants who met a reversed
+The main effect of interest is coplayer lexical distribution. The
+corpus-based MGL weight has a stronger effect on posttest responses if
+the participant played a typical coplayer. This makes sense: a typical
+coplayer reinforces existing lexical distributions. The MGL’s predictive
+power diminishes when it is set against participants who met a reversed
 coplayer. What are the mechanics of this shift?
 
 ![](figures/mglbreakdown1-1.png)<!-- -->
 
-Figure 3 shows the correlation of MGL predictions with participant
-responses in the posttest, split across coplayer lexical distribution.
+Figure 3 shows the correlation of corpus-based MGL predictions with
+participant responses in the posttest, split across coplayer lexical
+distribution.
 
 The top panel shows individual word weights. It is similar to Figure 2.
-The MGL is the best at predicting the posttest condition that is closest
-to the baseline, which is the typical condition. The correlation is
-weaker for responses by participants who encountered a reversed or a
-random coplayer. The middle panel shows this relationship broken down to
-the two contributing factors to an MGL weight: the best regular and the
-best irregular rule for each word. Looking at Figure 2, we said that low
-weights follow from relevant irregular rules outweighing regular rules
-in confidence, while, for high weights, this relationship is reversed.
-Here we see that participants follow this pattern in the typical
-condition but diverge from it in the reversed and random conditions:
-their choices reflect a smaller difference between regular and irregular
-rules than what is predicted by the MGL, and this means that the MGL
-undershoots irregular verbs and overshoots regular verbs. We see the
-same relationship in the bottom panel, where we look at confidences and
-ratings aggregated over individual rules rather than individual words.
-For each rule, we count the regular and irregular posttest responses for
-all the nonword verbs in its scope, given that, for each verb, no rule
-of higher confidence was available. These are the verbs for which this
-is the best regular / irregular rule. We then plot this against the
-rule’s confidence. Participants in the random and reversed conditions
-act as if the regular rules and the irregular rules were closer to each
-other, which is why the MGL has lower accuracy than in the typical
-condition (or the baseline task).
+The corpus-based MGL is the best at predicting the posttest condition
+that is closest to the baseline, which is the typical condition. The
+correlation is weaker for responses by participants who encountered a
+reversed or a random coplayer. The middle panel shows this relationship
+broken down to the two contributing factors to an MGL weight: the best
+regular and the best irregular rule for each word. Looking at Figure 2,
+we said that low weights follow from relevant irregular rules
+outweighing regular rules in confidence, while, for high weights, this
+relationship is reversed. Here we see that participants follow this
+pattern in the typical condition but diverge from it in the reversed and
+random conditions: their choices reflect a smaller difference between
+regular and irregular rules than what is predicted by the corpus-based
+MGL, and this means that the corpus-based MGL undershoots irregular
+verbs and overshoots regular verbs. We see the same relationship in the
+bottom panel, where we look at confidences and ratings aggregated over
+individual rules rather than individual words. For each rule, we count
+the regular and irregular posttest responses for all the nonword verbs
+in its scope, given that, for each verb, no rule of higher confidence
+was available. These are the verbs for which this is the best regular /
+irregular rule. We then plot this against the rule’s confidence.
+Participants in the random and reversed conditions act as if the regular
+rules and the irregular rules were closer to each other, which is why
+the MGL has lower accuracy than in the typical condition (or the
+baseline task).
 
 Posttest patterns come to existence during the interactive session with
-the coplayer, the ESP task. Participants gradually diverge from the MGL
-predictions during the ESP task. We visualise this in Figure 4. The top
-panel shows the relationship between MGL weights and participant
-responses in each of the 52 trials of the ESP task. For each trial, we
-calculated a Pearson correlation between word weights and participant
-responses across the three coplayer lexical distributions. Trials are
-shown on the x axis. The correlations are shown on the y axis. The
-correlations vary a lot, so we only plot a loess smooth for each
-condition. We see that the correlations hold steady for the typical
+the coplayer, the ESP task. Participants gradually diverge from the
+corpus-based MGL predictions during the ESP task. We visualise this in
+Figure 4. The top panel shows the relationship between MGL weights and
+participant responses in each of the 52 trials of the ESP task. For each
+trial, we calculated a Pearson correlation between word weights and
+participant responses across the three coplayer lexical distributions.
+Trials are shown on the x axis. The correlations are shown on the y
+axis. The correlations vary a lot, so we only plot a loess smooth for
+each condition. We see that the correlations hold steady for the typical
 condition, where the coplayer makes lexically typical choices. They
 gradually deteriorate across the other conditions, in which the
-coplayer’s choices go against the participants’ (and the MGL’s) expected
-lexical distributions. The bottom panel breaks this down into regular
-and irregular rules. The two rule types move in tandem: it is not the
-case that the overall trajectory shifts because of the behaviour of the
-regular rules, for instance.
+coplayer’s choices go against the participants’ (and the corpus-based
+MGL’s) expected lexical distributions. The bottom panel breaks this down
+into regular and irregular rules. The two rule types move in tandem: it
+is not the case that the overall trajectory shifts because of the
+behaviour of the regular rules, for instance.
 
 ![](figures/mglbreakdown2-1.png)<!-- -->
 
-# Modelling
+# Modelling the convergence task and its aftermath
 
 The main result of Rácz, Beckner, Hay & Pierrehumbert (2020) is that,
 when you expose participants to a lexical distribution in the ESP task,
 they will extend this distribution to previously unseen forms in the
 posttest, to some extent.
 
-The MGL can capture this shift through rules or minimal generalisations.
-Participants see different verbs in the ESP task and the posttest. The
-rules that apply to these verbs will overlap. This will be especially
-true for rules that have broad structural descriptions and thus apply to
-many forms. These tend to be regular rules.
+Rácz et al (2020) trained an individual MGL on each participant. The
+learner took the corpus data, added the nonverbs used by the co-player
+in the convergence task, built rules on the new training set, and used
+these rules to predict the post-test. This rule-building model did not
+capture shifts in participant behaviour.
+
+The corpus-based MGL, however, can capture this shift through rules or
+minimal generalisations. Participants see different verbs in the ESP
+task and the posttest. The rules that apply to these verbs will overlap.
+This will be especially true for rules that have broad structural
+descriptions and thus apply to many forms. These tend to be regular
+rules. The MGL can retain the corpus-based rules but update them based
+on the ESP task. This rule-updating model can capture shifts in
+participant behaviour.
 
 | rule_tidy | type | scope | phase |
 |:---|:---|---:|:---|
@@ -331,13 +364,13 @@ To illustrate this point, we show one participant and one category,
 ‘sang’, in Table 6. Taken together, 16 relevant rules apply to the 104
 verbs that our participant sees in the ESP task and the posttest. 7
 rules overlap: they apply to some verbs in both tasks. 5 rules only
-apply to verbs in the ESP task. Following the MGL logic, whatever the
-participant learned about these verbs won’t carry over to the posttest.
-4 rules only apply to verbs in the posttest. The participant didn’t
-learn anything new about these verbs. Unsurprisingly, the rules that
-overlap have much larger scopes (a mean of 789) than those which do not
-(a mean of 28). 3 overlapping rules are regular, only 0 non-overlapping
-rule is regular.
+apply to verbs in the ESP task. Following the rule-updating MGL logic,
+whatever the participant learned about these verbs won’t carry over to
+the posttest. 4 rules only apply to verbs in the posttest. The
+participant didn’t learn anything new about these verbs. Unsurprisingly,
+the rules that overlap have much larger scopes (a mean of 789) than
+those which do not (a mean of 28). 3 overlapping rules are regular, only
+0 non-overlapping rule is regular.
 
 This suggests that whatever the participant learns about the regular
 rules will be far more influential in the posttest than what they learn
@@ -362,7 +395,7 @@ regular rule but keeps picking irregular forms for verbs in the rule’s
 scope, the rule’s confidence is steadily demoted. If the rule works well
 across the task, its confidence will increase. The rate of this increase
 / decrease is controlled by the parameter `learning rate`, which ranges
-between 0.5 and 25, with a .5 step. We fit the rule updater with two
+between 0.5 and 25, with a .5 step. We fit the rule updater MGL with two
 extra hyperparameters. These are (a) rule type ((i) updating both
 regular and irregular rules, (ii) updating regular rules only, (iii)
 updating irregular rules only) and (b) response type ((i) updating based
@@ -400,13 +433,26 @@ Minimal Generalisation Learner. Word weight will still be bounded by
 
 Table 7. Best outcomes for the updating model
 
-How does this compare with the original models?
+# Model comparison
+
+The original study used four models to capture participant behaviour in
+the post-test data, after meeting the coplayer. These were
+
+1.  the corpus-trained GCM,
+2.  the corpus-trained MGL,
+3.  an individual-based GCM that trained on the corpus and the
+    participant-specific responses of the coplayer,
+4.  the rule-building individual MGL, which built rules based on the
+    corpus and the coplayer responses.
+
+We add our rule-updating individual MGL.
 
 We fit a hierarchical logistic regression model predicting participant
-responses across the reversed condition, using baseline and individual
-model weights as a predictor and a participant grouping factor. We
-compare the GCM, the baseline + individual MGL, and the baseline +
-updating MGL. We fit separate models because of collinearity issues.
+responses across the reversed condition, using corpus-based and
+individual model weights as a predictor and a participant grouping
+factor. We compare the corpus-based GCM, the corpus + individual MGL,
+and the corpus + updating MGL. We fit separate models because of
+collinearity issues.
 
 | Name | Model | AIC | AIC_wt | BIC | BIC_wt | R2_conditional | R2_marginal | ICC | RMSE |
 |:---|:---|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -416,7 +462,7 @@ updating MGL. We fit separate models because of collinearity issues.
 
 Table 9: Model comparison
 
-In this set, the baseline + updating MGL is the best fit. There is more
+In this set, the corpus + updating MGL is the best fit. There is more
 mileage in tuning the GCM and the original MGL as well, but finding an
 MGL setup that improves on the baseline is an important result.
 
@@ -446,7 +492,9 @@ against participant choices after participants have been exposed to a
 coplayer who reverses the typical distribution. We can tune the MGL to
 better fit participant responses by using data from the participant’s
 interaction with the coplayer and updating each MGL rule based on
-participant choices during this interaction.
+participant choices during this interaction. This improves on the
+accuracy of an MGL that builds new rules on training data that
+incorporates the verbs in the interaction directly.
 
 The morphological convergence experiment is unusual in how much it
 showcases English irregular inflectional morphology. In reality, the
